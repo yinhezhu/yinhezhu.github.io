@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/apple-touch-icon-next.png?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ECMA,对象," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="js对象详解(JavaScript对象深度剖析，深度理解js对象) 创建对象 proto与prototype 继承与原型链 对象的深度克隆 一些Object的方法与需要注意的点 ES6新增特性  创建对象 字面量的方式：1var myHonda = &amp;#123;color: &quot;red&quot;, wheels: 4, engine: &amp;#123;cylinders: 4, size: 2.2&amp;#125;&amp;">
+<meta name="keywords" content="ECMA,对象">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ECMA_对象">
+<meta property="og:url" content="https://yinhezhu.github.com/2018/04/17/ECMA_对象/index.html">
+<meta property="og:site_name" content="宽以待人">
+<meta property="og:description" content="js对象详解(JavaScript对象深度剖析，深度理解js对象) 创建对象 proto与prototype 继承与原型链 对象的深度克隆 一些Object的方法与需要注意的点 ES6新增特性  创建对象 字面量的方式：1var myHonda = &amp;#123;color: &quot;red&quot;, wheels: 4, engine: &amp;#123;cylinders: 4, size: 2.2&amp;#125;&amp;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/jsObject.jpg">
+<meta property="og:updated_time" content="2018-06-01T06:58:37.732Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ECMA_对象">
+<meta name="twitter:description" content="js对象详解(JavaScript对象深度剖析，深度理解js对象) 创建对象 proto与prototype 继承与原型链 对象的深度克隆 一些Object的方法与需要注意的点 ES6新增特性  创建对象 字面量的方式：1var myHonda = &amp;#123;color: &quot;red&quot;, wheels: 4, engine: &amp;#123;cylinders: 4, size: 2.2&amp;#125;&amp;">
+<meta name="twitter:image" content="https://yinhezhu.github.com/static/img/jsObject.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://yinhezhu.github.com/2018/04/17/ECMA_对象/"/>
+
+
+
+
+
+  <title>ECMA_对象 | 宽以待人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a target="_blank" href="https://github.com/yinhezhu" class="github-corner" aria-label="View source on Github"><svg width="92" height="92" viewBox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; z-index: 2020; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">宽以待人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yinhezhu.github.com/2018/04/17/ECMA_对象/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yin He Zhu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/bg.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="宽以待人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ECMA_对象</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-17T15:36:54+08:00">
+                2018-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ECMA/" itemprop="url" rel="index">
+                    <span itemprop="name">ECMA</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/04/17/ECMA_对象/" class="leancloud_visitors" data-flag-title="ECMA_对象">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="js对象详解-JavaScript对象深度剖析，深度理解js对象"><a href="#js对象详解-JavaScript对象深度剖析，深度理解js对象" class="headerlink" title="js对象详解(JavaScript对象深度剖析，深度理解js对象)"></a>js对象详解(JavaScript对象深度剖析，深度理解js对象)</h1><ul>
+<li>创建对象</li>
+<li><strong>proto</strong>与prototype</li>
+<li>继承与原型链</li>
+<li>对象的深度克隆</li>
+<li>一些Object的方法与需要注意的点</li>
+<li>ES6新增特性</li>
+</ul>
+<h2 id="创建对象"><a href="#创建对象" class="headerlink" title="创建对象"></a>创建对象</h2><ul>
+<li>字面量的方式：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myHonda = &#123;<span class="attr">color</span>: <span class="string">"red"</span>, <span class="attr">wheels</span>: <span class="number">4</span>, <span class="attr">engine</span>: &#123;<span class="attr">cylinders</span>: <span class="number">4</span>, <span class="attr">size</span>: <span class="number">2.2</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>就是<code>new Object()的语法糖，一样一样的。</code></p>
+<ul>
+<li>工厂模式：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createCar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> oTemp = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br><span class="line">    oTemp.name = <span class="built_in">arguments</span>[<span class="number">0</span>];</span><br><span class="line">    <span class="comment">//直接给对象添加属性，每个对象都有直接的属性</span></span><br><span class="line">    oTemp.age = <span class="built_in">arguments</span>[<span class="number">1</span>];</span><br><span class="line">    oTemp.showName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        alert(<span class="keyword">this</span>.name);</span><br><span class="line">    &#125;;<span class="comment">//每个对象都有一个 showName 方法版本</span></span><br><span class="line">    <span class="keyword">return</span> oTemp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> myHonda = createCar(<span class="string">'honda'</span>, <span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>只是给<code>new Object()</code>包了层皮，方便量产，并没有本质区别，姑且算创建对象的一种方式。</p>
+<ul>
+<li>构造函数：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name, age, sex</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">    <span class="keyword">this</span>.sex = sex;</span><br><span class="line">    <span class="keyword">this</span>.getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> rand = <span class="keyword">new</span> Person(<span class="string">'Rand McKinnon'</span>, <span class="number">33</span>, <span class="string">'M'</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>上面构造函数的<code>getName</code>方法，每次实例化都会新建该函数对象，还形成了当前情况下并没有卵用的闭包，所以构造函数添加方法用下面的方式处理，工程模式给对象添加方法的时候也应该用下面的方式避免重复构造函数对象。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name, age, sex</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">    <span class="keyword">this</span>.sex = sex;</span><br><span class="line">    <span class="keyword">this</span>.getName = getName;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getName</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>构造函数创建对象的过程和工厂模式又是半斤八两，相当于隐藏了创建新对象和返回该对象这两步，构造函数内this指向新建对象，没什么不同<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// new的过程</span></span><br><span class="line"><span class="keyword">let</span> obj = &#123;&#125;;</span><br><span class="line">obj.__proto__ = Person.prototype;</span><br><span class="line">Person.call(obj);</span><br></pre></td></tr></table></figure></p>
+<p><code>最大的不同</code>：构造函数创造出来的对象constructor属性指向该构造函数，工程模式指向<code>function Object() {...}</code>。<br>构造函数相当于给原型链上加了一环，构造函数有自己的 <code>prototype</code>，工厂模式就是个普通函数。说到这儿我上一句话出现了漏洞，工厂模式的 <code>constructor</code> 指向哪得看第一句话 new 的是什么。<br>构造函数直接调用而不 <code>new</code> 的话，就看调用时候 <code>this</code> 指向谁了，直接调用就把属性绑到 <code>window</code> 上了，通过 <code>call</code> 或者 <code>apply</code> 绑定到其他对象作用域就把属性添加到该对象了。</p>
+<ul>
+<li>原型模式<br>构造函数虽然在原型链上加了一环，但显然这一环啥都没有啊，这样一来和工厂模式又有什么区别？加了一环又有什么意义？原型模式浮出水面<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Car</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//用空构造函数设置类名</span></span><br><span class="line">Car.prototype.color = <span class="string">'blue'</span>;<span class="comment">// 每个对象都共享相同属性</span></span><br><span class="line">Car.prototype.doors = <span class="number">3</span>;</span><br><span class="line">Car.prototype.drivers = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="string">'Mike'</span>, <span class="string">'John'</span>);</span><br><span class="line">Car.prototype.showColor = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    alert(<span class="keyword">this</span>.color);</span><br><span class="line">&#125;;<span class="comment">// 每个对象共享一个方法版本，省内存。</span></span><br><span class="line"><span class="comment">// 构造函数的原型属性可以通过字面量来设置，别忘了通过 Object.defineProperty()设置 constructor 为该构造函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Car</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Car.prototype = &#123;</span><br><span class="line">    color: <span class="string">'blue'</span>,</span><br><span class="line">    doors: <span class="number">3</span>,</span><br><span class="line">    showColor: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        alert(<span class="keyword">this</span>.color);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(Car.prototype, <span class="string">'constructor'</span>, &#123;<span class="attr">enumerable</span>: <span class="literal">false</span>, <span class="attr">value</span>: Car&#125;);</span><br><span class="line"><span class="comment">// (不设置 constructor 会导致 constructor 不指向构造函数，直接设置 constructor 会导致 constructor 可枚举)</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>使用原型模式注意动态性，通过构造函数实例化出的对象，他的原型对象是构造函数的 <code>prototype</code> ，如果在他的原型对象上增加或删除一些方法，该对象会继承这些修改。例如，先通过构造函数 <code>A</code> 实例化出对象 <code>a</code> ，然后再给 <code>A.prototype</code> 添加一个方法，<code>a</code> 是可以继承这个方法的。但是给 <code>A.prototype</code> 设置一个新的对象，<code>a</code> 是不会继承这个新对象的属性和方法的。听起来有点绕，修改 <code>A.prototype</code> 相当于直接修改 <code>a</code> 的原型对象，<code>a</code> 很自然的会继承这些修改，但是重新给 <code>A.prototype</code> 赋值的话，修改的是构造函数的原型，并没有影响 <code>a</code> 的原型对象！<code>a</code> 被创建出来以后原型对象就已经确定了，除非直接修改这个原型对象(或者这个原型对象的原型对象)，否则 <code>a</code> 是不会继承这些修改的！</p>
+<ul>
+<li>Object.create()<br>传入要创建对象实例的原型对象，和原型模式几乎是一个意思也是相当于在原型链上加了一环，区别在于这种方式创建的对象没有构造函数。这种方式相当于：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">object</span>(<span class="params">o</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    F.prototype = o;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> F();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>相当于构造函数只短暂的存在了一会，创建出来的对象的<code>constructor</code>指向原型对象<code>o</code>的<code>constructor</code></p>
+<ul>
+<li><p>混合模式<br>使用原型模式时，当给实例对象设置自己专属的属性的时候，该实例对象会忽略原型链中的该属性。但当原型链中的属性是引用类型值的时候，操作不当有可能会直接修改原型对象的属性！这会影响到所有使用该原型对象的实例对象！<br>大部分情况下，实例对象的多数方法是共有的，多数属性是私有的，所以属性在构造函数中设置，方法在原型中设置是合适的，构造函数与原型结合使用是通常的做法。<br>还有一些方法，无非是工厂模式与构造函数与原型模式的互相结合，在生成过程和 <code>this</code> 指向上做一些小变化。</p>
+</li>
+<li><p>class方式：es6<br>见下面 ES6 class 部分，只是一个语法糖，本质上和构造函数并没有什么区别，但是继承的方式有一些区别。</p>
+</li>
+</ul>
+<h2 id="proto-和prototype"><a href="#proto-和prototype" class="headerlink" title="__proto__和prototype"></a>__proto__和prototype</h2><p>这两个到底什么关系？ 首先要明白js存在两种对象。</p>
+<blockquote>
+<p>1、实例对象<br>2、函数对象</p>
+</blockquote>
+<p>所有<code>实例对象</code>都有一个<code>__proto__</code>属性，所有<code>函数对象</code>都有<code>prototype</code>属性。所有的<code>实例对象</code>都是通过构造函数创建出来的。<code>__proto__</code>指向创建该<code>实例对象</code>的构造函数的<code>prototype</code>属性。<code>prototype</code>属性也是一个<code>实例对象</code>，也存在<code>__proto__</code>属性，它指向更高一级的构造函数<code>prototype</code>，最终<code>Object.prototype.__proto__</code>指向<code>null</code>，原型链结束。<br><code>实例对象</code>的<code>__proto__</code>是浏览器的实现，并没有在ECMA标准中，可以用<code>constructor.prototype</code>代替。</p>
+<p>这里感觉很乱，用一张图看吧</p>
+<p><img src="/static/img/jsObject.jpg" width="500"></p>
+<h2 id="继承和原型链"><a href="#继承和原型链" class="headerlink" title="继承和原型链"></a>继承和原型链</h2><p>当访问一个对象的属性时，如果在对象本身找不到，就会去搜索对象的原型，原型的原型，知道原型链的尽头null，那原型链的怎么连起来的呢？<br>把<code>实例对象</code> <code>函数对象</code> <code>原型对象</code>视为一个小组，上面说了三者之间的关系，<code>构造函数</code>是函数，可<code>实例对象</code>和<code>原型对象</code>都是<code>普通对象</code>啊，这样就出现了这样的情况：<br>这个小组的<code>原型对象</code>，等于另一个小组<code>实例对象</code>，而此小组的<code>原型对象</code>有可能是其他小组的<code>实例对象</code>，这样一个个的小组不就连接起来了吗。举个例子<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Super</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.val = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">this</span>.arr = [<span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Sub</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Sub.prototype = <span class="keyword">new</span> Super();</span><br></pre></td></tr></table></figure></p>
+<p><code>Sub</code>是一个小组，<code>Super</code>是一个小组，<code>Sub</code>的原型对象链接到了<code>Super</code>的<code>实例对象</code>。<br>基本上所有对象顺着原型链爬到头都是<code>Object.prototype</code>，而<code>Object.prototype</code>就没有<code>原型对象</code>，原型链就走到头了。</p>
+<h3 id="判断构造函数的原型对象是否存在于实例对象的原型链中："><a href="#判断构造函数的原型对象是否存在于实例对象的原型链中：" class="headerlink" title="判断构造函数的原型对象是否存在于实例对象的原型链中："></a>判断构造函数的原型对象是否存在于实例对象的原型链中：</h3><p><code>实例对象 instanceof 构造函数</code>，返回一个布尔值。<code>原型对象.isPrototypeOf(实例对象)</code>，返回一个布尔值。</p>
+<p>上面是最简单的继承方式了，但是有两个致命缺点：</p>
+<blockquote>
+<p>所有<code>Sub</code>的实例对象都继承自统一<code>Super</code>的实例对象，我们想穿参数到<code>Super</code>怎么办？<br>如果<code>Super</code>里有引用类型的值，比如上面例子中<code>Sub</code>的实例对象中的arr属性<code>push</code>一个值，岂不是牵一发动全身？</p>
+</blockquote>
+<p>下面说一种最常用的组合继承模式，先举个例子<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Super</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 只在此处声明基本属性和引用属性</span></span><br><span class="line">    <span class="keyword">this</span>.val = value;</span><br><span class="line">    <span class="keyword">this</span>.arr = [<span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//  在此处声明函数</span></span><br><span class="line">Super.prototype.fun1 = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">&#125;;</span><br><span class="line">Super.prototype.fun2 = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Super.prototype.fun3...</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Sub</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">    Super.call(<span class="keyword">this</span>, value);   <span class="comment">// 核心</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Sub.prototype = <span class="keyword">new</span> Super();    <span class="comment">// 核心</span></span><br></pre></td></tr></table></figure></p>
+<p>过程是这样的，在简单的原型链继承的基础上， <code>Sub</code> 的构造函数里运行 <code>Super</code> ，从而给 <code>Sub</code> 的每一个实例对象一份单独的属性，解决了上面两个问题，可以给 <code>Super</code> 传参数了，而且因为是独立的属性，不会因为误操作引用类型值而影响其他实例了。不过还有个小缺点: <code>Sub</code> 中调用的 <code>Super</code> 给每个 <code>Sub</code> 的实例对象一套新的属性，覆盖了继承的 <code>Super</code> 实例对象的属性，那被覆盖的的那套属性不就浪费了？岂不是白继承了？最严重的问题是 <code>Super</code> 被执行了两次，这不能忍(其实也没多大问题)。下面进行一下优化，把上面例子最后一行替换为:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Sub.prototype = <span class="built_in">Object</span>.create(Super.prototype);</span><br><span class="line"><span class="comment">// Object.create() 给原型链上添加一环，否则 Sub 和 Super 的原型就重叠了。</span></span><br><span class="line">Sub.prototype.constructor = Sub;</span><br></pre></td></tr></table></figure>
+<p>到此为止，继承非常完美。<br>其他还有各路继承方式无非是在 简单原型链继承 –&gt; 优化的组合继承 路程之间的一些思路或者封装。</p>
+<ul>
+<li>通过 class 继承的方式:<br>通过 <code>class</code> 实现继承的过程与 <code>ES5</code>完全相反，详细见下面 <code>ES6 class</code>的继承 部分。</li>
+</ul>
+<h2 id="对象的深度克隆"><a href="#对象的深度克隆" class="headerlink" title="对象的深度克隆"></a>对象的深度克隆</h2><p><code>JavaScript</code>的基础类型是值传递，而对象是引用传递，这导致一个问题:<br>克隆一个基础类型的变量的时候，克隆出来的的变量是和旧的变量完全独立的，只是值相同而已。<br>而克隆对象的时候就要分两种情况了，简单的赋值会让两个变量指向同一块内存，两者代表同一个对象，甚至算不上克隆克隆。但我们常常需要的是两个属性和方法完全相同但却完全独立的对象，称为深度克隆。我们接下来讨论几种深度克隆的方法。<br>说几句题外的话，业界有一个非常知名的库 <code>immutable</code> ，个人认为很大程度上解决了深度克隆的痛点，我们修改一个对象的时候，很多时候希望得到一个全新的对象(比如Redux每次都要用一个全新的对象修改状态)，由此我们就需要进行深度克隆。而 <code>immutable</code> 相当于产生了一种新的对象类型，每一次修改属性都会返回一个全新的 <code>immutable</code> 对象，免去了我们深度克隆的工作是小事，关键性能特别好。</p>
+<ul>
+<li><p>历遍属性</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">clone</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> newobj = obj.constructor === <span class="built_in">Array</span> ? [] : &#123;&#125;;  <span class="comment">// 用 instanceof 判断也可</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> obj !== <span class="string">'object'</span> || obj === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i <span class="keyword">in</span> obj) &#123;</span><br><span class="line">            newobj[i] = <span class="keyword">typeof</span> obj[i] === <span class="string">'object'</span> ? clone(obj[i]) : obj[i];</span><br><span class="line">            <span class="comment">// 只考虑 对象和数组， 函数虽然也是引用类型，但直接赋值并不会产生什么副作用，所以函数类型无需深度克隆。</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> newobj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>原型式克隆</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">clone</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    F.prototype = obj;</span><br><span class="line">    <span class="keyword">let</span> f = <span class="keyword">new</span> F();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> obj[key] === <span class="string">'object'</span>) &#123;</span><br><span class="line">            f[key] = clone(obj[key]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> f;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  这种方式不能算严格意义上的深度克隆，并没有切断新对象与被克隆对象的联系，被克隆对象作为新对象的原型存在，虽然新对象的改变不会影响旧对象，但反之则不然！而且给新对象属性重新赋值的时候只是覆盖了原型中的属性，在历遍新对象的时候也会出现问题。这种方式问题重重，除了实现特殊目的可以酌情使用，通常情况应避免使用。</p>
+</li>
+<li><p>json序列化</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> newObj = <span class="built_in">JSON</span>.parse(<span class="built_in">JSON</span>.stringify(obj));</span><br></pre></td></tr></table></figure>
+<p>  这是我最喜欢的方式了！简短粗暴直接！但是最大的问题是，毕竟JSON只是一种数据格式所以这种方式只能克隆属性，不能克隆方法，方法在序列化以后就消失了。。。</p>
+</li>
+</ul>
+<h2 id="一些Object的方法与需要注意的点"><a href="#一些Object的方法与需要注意的点" class="headerlink" title="一些Object的方法与需要注意的点"></a>一些Object的方法与需要注意的点</h2><h3 id="Object-自身的方法"><a href="#Object-自身的方法" class="headerlink" title="Object 自身的方法:"></a>Object 自身的方法:</h3><ul>
+<li>设置属性，<code>Object.defineProperty(obj, prop, descriptor)</code> 根据 descriptor 定义 obj 的 prop 属性(值，是否可写可枚举可删除等)。<br><code>Object.getOwnPropertyDescriptor(obj, prop)</code> 返回 obj 的 prop 属性的描述。</li>
+<li>使对象不可拓展，<code>Object.preventExtensions(obj)</code>，<code>obj</code> 将不能添加新的属性。<br>判断对像是否可拓展，<code>Object.isExtensible(obj)</code>。</li>
+<li>密封一个对象，<code>Object.seal(obj)</code>，<code>obj</code> 将不可拓展且不能删除已有属性。<br>判断对象是否密封，<code>Object.isSealed(obj)</code>。</li>
+<li>冻结对象，<code>Object.freeze(obj)</code> <code>obj</code> 将被密封且不可修改。<br>判断对象是否冻结，<code>Object.isFrozen(obj)</code>。</li>
+<li>获取对象自身属性(包括不可枚举的)，<code>Object.getOwnPropertyNames(obj)</code>，返回 <code>obj</code> 所有自身属性组成的数组。<br>获取对象自身属性(不包括不可枚举的)，<code>Object.keys(obj)</code>，返回 <code>obj</code> 所有自身可枚举属性组成的数组。<br>当使用<code>for in</code>循环遍历对象的属性时，原型链上的所有可枚举属性都将被访问。<br>只关心对象本身时用<code>Object.keys(obj)</code>代替 <code>for in</code>，避免历遍原型链上的属性。</li>
+<li>获取某对象的原型对象，<code>Object.getPrototypeOf(object)</code>，返回 <code>object</code> 的原型对象。<br>设置某对象的原型对象，<code>Object.setPrototypeOf(obj, prototype)</code>，<code>ES6</code> 新方法，设置 <code>obj</code> 的原型对象为 <code>prototype</code> ，该语句比较耗时。</li>
+</ul>
+<h3 id="Object-prototype-上的方法"><a href="#Object-prototype-上的方法" class="headerlink" title="Object.prototype 上的方法:"></a>Object.prototype 上的方法:</h3><ul>
+<li>查对象上某个属性是否存在时(存在于本身而不是原型链中)，<code>obj.hasOwnProperty()</code> 是唯一可用的方法，他不会向上查找原型链，只在 <code>obj</code> 自身查找，返回布尔值。</li>
+<li>检测某对象是否存在于参数对象的原型链中，<code>obj.isPrototypeOf(obj2)</code>，<code>obj</code> 是否在 <code>obj2</code> 的原型链中，返回布尔值。</li>
+<li>检测某属性是否是对象自身的可枚举属性，<code>obj.propertyIsEnumerable(prop)</code>，返回布尔值。</li>
+<li>对象类型，<code>obj.toString()</code>，返回 <code>&quot;[object type]&quot;</code> <code>type</code> 可以是 <code>Date</code>，<code>Array</code>，<code>Math</code> 等对象类型。</li>
+<li><code>obj.valueOf()</code>,修改对象返回值时的行为，使用如下:<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myNumberType</span>(<span class="params">n</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.number = n;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myNumberType.prototype.valueOf = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.number;</span><br><span class="line">&#125;;</span><br><span class="line">myObj = <span class="keyword">new</span> myNumberType(<span class="number">4</span>);</span><br><span class="line">myObj + <span class="number">3</span>; <span class="comment">// 7</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="ES6新增特性"><a href="#ES6新增特性" class="headerlink" title="ES6新增特性"></a>ES6新增特性</h2><ul>
+<li>判断两个值是否完全相等，Object.is(value1, value2)，类似于 === 但是可以用来判断 NaN。</li>
+<li><p>属性和方法简写:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 属性简写</span></span><br><span class="line"><span class="keyword">let</span> foo = <span class="string">'bar'</span>;</span><br><span class="line"><span class="keyword">let</span> baz = &#123;foo&#125;;</span><br><span class="line">baz; <span class="comment">// &#123;foo: "bar"&#125;</span></span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line"><span class="keyword">let</span> baz = &#123;<span class="attr">foo</span>: foo&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方法简写</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;x, y&#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="attr">x</span>: x, <span class="attr">y</span>: y&#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f(<span class="number">1</span>, <span class="number">2</span>); <span class="comment">// Object &#123;x: 1, y: 2&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>合并对象<br><code>Object.assign(target, [...source])</code>;将 <code>source</code> 中所有和枚举的属性复制到 <code>target</code>。<br>多个 source 对象有同名属性，后面的覆盖前面的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> target = &#123;<span class="attr">a</span>: <span class="number">1</span>&#125;;</span><br><span class="line"><span class="keyword">let</span> source1 = &#123;<span class="attr">b</span>: <span class="number">2</span>&#125;;</span><br><span class="line"><span class="keyword">let</span> source2 = &#123;<span class="attr">c</span>: <span class="number">3</span>&#125;;</span><br><span class="line"><span class="built_in">Object</span>.assign(target, source1, source2);</span><br><span class="line">target; <span class="comment">// &#123;a:1, b:2, c:3&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>注意一点，该命令执行的是浅克隆，如果 source 中有属性是对象，target 中会复制该对象的引用。<br>常用于给对象添加属性和方法(如给构造函数的原型添加方法)，克隆、合并对象等。</p>
+<ul>
+<li><p>获取对象自身的值或键值对(做为<code>Object.keys(obj)</code>的补充不包括不可枚举的):<br><code>Object.keys(obj)</code>返回 <code>obj</code> 自身所有可枚举属性的值组成的数组。<br><code>Object.entries(obj)</code>返回 <code>obj</code> 自身所有可枚举键值对数组组成的数组，例如:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123; <span class="attr">foo</span>: <span class="string">'bar'</span>, <span class="attr">baz</span>: <span class="number">42</span> &#125;;</span><br><span class="line"><span class="built_in">Object</span>.entries(obj)</span><br><span class="line"><span class="comment">// [ ["foo", "bar"], ["baz", 42] ]</span></span><br><span class="line"><span class="comment">// 可用于将对象转为 Map 结构</span></span><br><span class="line"><span class="keyword">var</span> obj = &#123; <span class="attr">foo</span>: <span class="string">'bar'</span>, <span class="attr">baz</span>: <span class="number">42</span> &#125;;</span><br><span class="line"><span class="keyword">var</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>(<span class="built_in">Object</span>.entries(obj));</span><br><span class="line">map <span class="comment">// Map &#123; foo: "bar", baz: 42 &#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>拓展运算符<code>...</code>:<br>取出对象所有可历遍属性，举例:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> z = &#123;<span class="attr">a</span>: <span class="number">3</span>, <span class="attr">b</span>: <span class="number">4</span>&#125;;</span><br><span class="line"><span class="keyword">let</span> n = &#123;...z&#125;;</span><br><span class="line">n; <span class="comment">// &#123; a: 3, b: 4 &#125;</span></span><br><span class="line"><span class="comment">// 可代替 Object.assign()</span></span><br><span class="line"><span class="keyword">let</span> ab = &#123;...a, ...b&#125;;</span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line"><span class="keyword">let</span> ab = <span class="built_in">Object</span>.assign(&#123;&#125;, a, b);</span><br></pre></td></tr></table></figure>
+<p>可用于解构赋值中最后一个参数:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123;x, y, ...z&#125; = &#123;<span class="attr">x</span>: <span class="number">1</span>, <span class="attr">y</span>: <span class="number">2</span>, <span class="attr">a</span>: <span class="number">3</span>, <span class="attr">b</span>: <span class="number">4</span>&#125;;</span><br><span class="line">x; <span class="comment">// 1</span></span><br><span class="line">y; <span class="comment">// 2</span></span><br><span class="line">z; <span class="comment">// &#123; a: 3, b: 4 &#125;</span></span><br><span class="line"><span class="comment">// 可以这样理解，把 z 拆开以后就等于后面对象未被分配出去的键值对。</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Null 传导运算符:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> firstName = message?.body?.user?.firstName || <span class="string">'default'</span>;</span><br><span class="line"><span class="comment">// 代替</span></span><br><span class="line"><span class="keyword">const</span> firstName = (message</span><br><span class="line">    &amp;&amp; message.body</span><br><span class="line">    &amp;&amp; message.body.user</span><br><span class="line">    &amp;&amp; message.body.user.firstName) || <span class="string">'default'</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>class:<br><code>ES6</code> 引入了 <code>class</code> 关键字，但并没有改变对象基于原型继承的原理，只是一个语法糖，让他长得像传统面向对象语言而已。<br>以下两个写法完全等价:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Point</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.x = x;</span><br><span class="line">    <span class="keyword">this</span>.y = y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Point.prototype.toString = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'('</span> + <span class="keyword">this</span>.x + <span class="string">', '</span> + <span class="keyword">this</span>.y + <span class="string">')'</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//定义类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(x, y) &#123;</span><br><span class="line">        <span class="keyword">this</span>.x = x;</span><br><span class="line">        <span class="keyword">this</span>.y = y;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    toString() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'('</span> + <span class="keyword">this</span>.x + <span class="string">', '</span> + <span class="keyword">this</span>.y + <span class="string">')'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 类中定义的方法就是在原型上</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>有两点区别， <code>class</code> 中定义的方法是不可枚举的，<code>class</code> 必须通过 <code>new</code> 调用不能直接运行。<br><code>class</code> 不存在变量提升，使用要在定义之后。</li>
+<li><p><code>class</code> 中的方法前加 <code>static</code> 关键字定义静态方法，只能通过 <code>class</code> 直接调用不能被实例继承。<br>如果静态方法包含 <code>this</code> 关键字，这个 <code>this</code> 指的是 <code>class</code>，而不是实例。注意下面代码:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> bar() &#123;</span><br><span class="line">        <span class="keyword">this</span>.baz();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> baz() &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'hello'</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    baz() &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'world'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Foo.bar(); <span class="comment">// hello</span></span><br></pre></td></tr></table></figure>
+<p>父类的静态方法，可以被子类继承，目前 <code>class</code> 内部无法定义静态属性。<br>设置静态属性与实例属性新提案:<br><code>class</code> 的实例属性可以用等式，写入类的定义之中。<br>静态属性直接前面加 <code>static</code> 即可。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> </span>&#123;</span><br><span class="line">    myProp = <span class="number">42</span>;</span><br><span class="line">    <span class="keyword">static</span> myStaticProp = <span class="number">42</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>class 的继承:<br><code>class</code> 通过 <code>extends</code> 实现继承,注意 <code>super</code> 关键字</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ColorPoint</span> <span class="keyword">extends</span> <span class="title">Point</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(x, y, color) &#123;</span><br><span class="line">        <span class="keyword">super</span>(x, y); <span class="comment">// 调用父类的constructor(x, y)</span></span><br><span class="line">        <span class="keyword">this</span>.color = color;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    toString() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.color + <span class="string">' '</span> + <span class="keyword">super</span>.toString(); <span class="comment">// 调用父类的toString()</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  <code>extends</code> 可以继承其他类或任何有 <code>prototype</code> 属性的函数。<br>  <code>super</code> 会从父类获取各路信息绑定到子类的 <code>this</code>。<br>  子类自己没有 <code>this</code> 对象，要先继承父类的实例对象然后再进行加工，所以要在 <code>constructor</code> 里调用 <code>super</code> 继承 <code>this</code> 对象后才能使用 <code>this</code>。<br>  <code>ES5</code> 的继承，实质是先创造子类的实例对象 <code>this</code>，然后再将父类的方法添加到 <code>this</code> 上面（<code>Parent.apply(this)</code>）。<code>ES6</code> 的继承机制完全不同，实质是先创造父类的实例对象 <code>this</code>（所以必须先调用 <code>super</code> 方法创建和继承这个 <code>this</code>，并绑定到子类的 <code>this</code>），然后再用子类的构造函数修改<code>this</code>。<br>  这条理由也是造成了 <code>ES6</code> 之前无法继承原生的构造函数(<code>Array</code> <code>Function</code> <code>Date</code> 等)的原型对象，而使用 <code>class</code> 可以。因为 <code>ES5</code> 中的方法是先实例化子类，再把父类的属性添加上去，但是父类有很多不能直接访问的属性或方法，这就糟了，而通过 <code>class</code> 继承反其道而行之先实例化父类，这就自然把所有属性和方法都继承了。<br>  <code>super</code> 作为对象时，在普通方法中，指向父类的原型对象；在静态方法中，指向父类。<br>  通过 <code>super</code> 调用父类的方法时，<code>super</code> 会绑定子类的 <code>this</code>。<br>  <code>constructor</code> 方法会被默认添加:</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ColorPoint</span> <span class="keyword">extends</span> <span class="title">Point</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ColorPoint</span> <span class="keyword">extends</span> <span class="title">Point</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(...args) &#123;</span><br><span class="line">        <span class="keyword">super</span>(...args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  <code>Object.getPrototypeOf(object)</code>，获取某对象的原型对象，也可以获取某类的原型类。</p>
+</li>
+<li><p><code>class</code> 的 <code>__proto__</code>与<code>prototype</code><br>子类的<code>__proto__</code>属性，表示构造函数的继承，总是指向父类。<br>子类<code>prototype</code>属性的<code>__proto__</code>属性，表示方法的继承，总是指向父类的 <code>prototype</code> 属性。<br>相当于子类本身继承父类，子类的原型对象继承自父类的原型对象。</p>
+</li>
+<li><p>new.target:<br>用在构造函数或者 <code>class</code> 内部，指向调用时 <code>new</code> 的构造函数或者 <code>class</code>。</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+      <div>
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i> 感谢您的阅读-------------</div>
+    
+</div>
+      </div>
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ECMA/" rel="tag"><i class="fa fa-tag"></i> ECMA</a>
+          
+            <a href="/tags/对象/" rel="tag"><i class="fa fa-tag"></i> 对象</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/17/ECMA_cookie和storage/" rel="prev" title="ECMA-cookie和storage">
+                ECMA-cookie和storage <i class="fa fa-chevron-left"></i>
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+
+            
+              <a href="/2018/04/17/ECMA_正则表达式/" rel="next" title="ECMA_正则表达式">
+                <i class="fa fa-chevron-right"></i> ECMA_正则表达式
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/bg.jpg"
+                alt="Yin He Zhu" />
+            
+              <p class="site-author-name" itemprop="name">Yin He Zhu</p>
+              <p class="site-description motion-element" itemprop="description">尹鹤珠的技术博客，前端杂货铺</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">81</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">95</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yinhezhu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:124104008@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#js对象详解-JavaScript对象深度剖析，深度理解js对象"><span class="nav-number">1.</span> <span class="nav-text">js对象详解(JavaScript对象深度剖析，深度理解js对象)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建对象"><span class="nav-number">1.1.</span> <span class="nav-text">创建对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#proto-和prototype"><span class="nav-number">1.2.</span> <span class="nav-text">__proto__和prototype</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#继承和原型链"><span class="nav-number">1.3.</span> <span class="nav-text">继承和原型链</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#判断构造函数的原型对象是否存在于实例对象的原型链中："><span class="nav-number">1.3.1.</span> <span class="nav-text">判断构造函数的原型对象是否存在于实例对象的原型链中：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的深度克隆"><span class="nav-number">1.4.</span> <span class="nav-text">对象的深度克隆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些Object的方法与需要注意的点"><span class="nav-number">1.5.</span> <span class="nav-text">一些Object的方法与需要注意的点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-自身的方法"><span class="nav-number">1.5.1.</span> <span class="nav-text">Object 自身的方法:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-prototype-上的方法"><span class="nav-number">1.5.2.</span> <span class="nav-text">Object.prototype 上的方法:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ES6新增特性"><span class="nav-number">1.6.</span> <span class="nav-text">ES6新增特性</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yin He Zhu</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('body');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("fWl7upiFX3fWezXSC2W9VNwx-gzGzoHsz", "AHiEA2CcxttYPXybKrYPOh1d");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+</html>
