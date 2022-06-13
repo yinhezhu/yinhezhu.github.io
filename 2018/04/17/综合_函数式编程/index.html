@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/apple-touch-icon-next.png?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="基础知识,函数式编程,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一：理解call和apply 及arguments.calleeECMAScript3给Function的原型定义了两个方法，他们是Function.prototype.call 和 Function.prototype.apply. 其实他们的作用是一样的，只是传递的参数不一样而已；  apply; 接受2个参数，第一个参数指定了函数体内this对象的指向，第二个参数为一个类似数组的集合，比如如">
+<meta name="keywords" content="基础知识,函数式编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="综合-函数式编程">
+<meta property="og:url" content="https://yinhezhu.github.com/2018/04/17/综合_函数式编程/index.html">
+<meta property="og:site_name" content="宽以待人">
+<meta property="og:description" content="一：理解call和apply 及arguments.calleeECMAScript3给Function的原型定义了两个方法，他们是Function.prototype.call 和 Function.prototype.apply. 其实他们的作用是一样的，只是传递的参数不一样而已；  apply; 接受2个参数，第一个参数指定了函数体内this对象的指向，第二个参数为一个类似数组的集合，比如如">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-19T10:09:18.033Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="综合-函数式编程">
+<meta name="twitter:description" content="一：理解call和apply 及arguments.calleeECMAScript3给Function的原型定义了两个方法，他们是Function.prototype.call 和 Function.prototype.apply. 其实他们的作用是一样的，只是传递的参数不一样而已；  apply; 接受2个参数，第一个参数指定了函数体内this对象的指向，第二个参数为一个类似数组的集合，比如如">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://yinhezhu.github.com/2018/04/17/综合_函数式编程/">
+
+
+
+
+
+  <title>综合-函数式编程 | 宽以待人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a target="_blank" href="https://github.com/yinhezhu" class="github-corner" aria-label="View source on Github"><svg width="92" height="92" viewbox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; z-index: 2020; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">宽以待人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yinhezhu.github.com/2018/04/17/综合_函数式编程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yin He Zhu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/bg.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="宽以待人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">综合-函数式编程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-17T15:16:47+08:00">
+                2018-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/综合/" itemprop="url" rel="index">
+                    <span itemprop="name">综合</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/04/17/综合_函数式编程/" class="leancloud_visitors" data-flag-title="综合-函数式编程">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="一：理解call和apply-及arguments-callee"><a href="#一：理解call和apply-及arguments-callee" class="headerlink" title="一：理解call和apply 及arguments.callee"></a>一：理解call和apply 及arguments.callee</h3><p>ECMAScript3给Function的原型定义了两个方法，他们是<code>Function.prototype.call</code> 和 <code>Function.prototype.apply</code>. 其实他们的作用是一样的，只是传递的参数不一样而已；</p>
+<ol>
+<li><code>apply</code>; 接受2个参数，第一个参数指定了函数体内<code>this</code>对象的指向，第二个参数为一个类似数组的集合，比如如下代码：</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> yunxi = <span class="function"><span class="keyword">function</span>(<span class="params">a,b</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">   <span class="built_in">console</span>.log([a,b]); <span class="comment">// [1,2]</span></span><br><span class="line"></span><br><span class="line">   <span class="built_in">console</span>.log(<span class="keyword">this</span> === <span class="built_in">window</span>); <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">yunxi.apply(<span class="literal">null</span>,[<span class="number">1</span>,<span class="number">2</span>]);</span><br></pre></td></tr></table></figure>
+<p>如上代码，我们第一个参数传入<code>null</code>，函数体内默认会指向与宿主对象，即<code>window</code>对象；因此我们可以在yunxi函数内打印下值为true即可看到：</p>
+<p>下面我们来看看使用<code>call</code>方法的实例如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> yunxi = <span class="function"><span class="keyword">function</span>(<span class="params">a,b</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">   <span class="built_in">console</span>.log([a,b]); <span class="comment">// [1,2]</span></span><br><span class="line"></span><br><span class="line">   <span class="built_in">console</span>.log(<span class="keyword">this</span> === <span class="built_in">window</span>); <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">yunxi.call(<span class="literal">null</span>,<span class="number">1</span>,<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+<p>可以看到 <code>call</code>方法的第二个参数是以逗号隔开的参数；</p>
+<p>那么<code>call</code>和<code>apply</code>用在什么地方呢？</p>
+<ol>
+<li><code>call</code>和<code>apply</code> 最常见的用途是改变函数体内的<code>this</code>指向，如下代码:</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> longen = &#123;</span><br><span class="line">    name:<span class="string">'yunxi'</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> longen2 = &#123;</span><br><span class="line">    name: <span class="string">'我叫涂根华'</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> name = <span class="string">"我是来测试的"</span>;</span><br><span class="line"><span class="keyword">var</span> getName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(getName()); <span class="comment">// 打印 "我是来测试的";</span></span><br><span class="line"><span class="built_in">console</span>.log(getName.call(longen)); <span class="comment">// 打印 yunxi</span></span><br><span class="line"><span class="built_in">console</span>.log(getName.call(longen2)); <span class="comment">// 打印 "我叫涂根华"</span></span><br></pre></td></tr></table></figure>
+<p>第一次调用 <code>getName()</code>方法，因为它是普通函数调用，所以它的this指向与window，因此打印出全局对象的<code>name</code>的值；</p>
+<p>第二次调用<code>getName.call(longen)</code>; 执行这句代码后，getName这个方法的内部指针this指向于<code>longen</code>这个对象了，因此打印<code>this.name</code>实际上是<code>longen.name</code>，因此返回的是<code>name=”yunxi”</code>;</p>
+<p>但是<code>this</code>指针也有列外的情况，比如一个点击元素，当我们点击一个元素的时候，<code>this</code>指针就指向与那个点击元素，但是当我们在内部再包含一个函数后，在函数内再继续调用<code>this</code>的话，那么现在的<code>this</code>指针就指向了<code>window</code>了；比如如下代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.getElementById(<span class="string">"longen"</span>).onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>); <span class="comment">// this 就指向于div元素对象了</span></span><br><span class="line">    <span class="keyword">var</span> func = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>); <span class="comment">// 打印出window对象</span></span><br><span class="line">    &#125;</span><br><span class="line">    func();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上代码。可以看到外部<code>this</code>指向与被点击的那个元素，内部普通函数调用，<code>this</code>指针都是指向于window对象。但是我们可以使用<code>call</code>或者<code>apply</code>方法来改变<code>this</code>的指针的；如下代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.getElementById(<span class="string">"longen"</span>).onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>); <span class="comment">// this 就指向于div元素对象了</span></span><br><span class="line">    <span class="keyword">var</span> func = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>); <span class="comment">// 就指向于div元素对象了</span></span><br><span class="line">    &#125;</span><br><span class="line">    func.call(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上代码我们使用<code>call</code>方法调用func函数，使<code>this</code>指向与<code>func</code>这个对象了，当然上面的方法我们还可以不使用<code>call</code>或者<code>apply</code>方法来改变<code>this</code>的指针，我们可以在外部先使用一个变量来保存<code>this</code>的指针，在内部调用的时候我们可以使用哪个变量即可，如下代码演示：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.getElementById(<span class="string">"longen"</span>).onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>); <span class="comment">// this 就指向于div元素对象了</span></span><br><span class="line">    <span class="keyword">var</span> self = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">var</span> func = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(self); <span class="comment">// 就指向于div元素对象了</span></span><br><span class="line">    &#125;</span><br><span class="line">    func();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="arguments-callee的理解"><a href="#arguments-callee的理解" class="headerlink" title="arguments.callee的理解"></a>arguments.callee的理解</h4><p><code>callee</code>是<code>arguments</code>的一个属性，它可以被用作当前函数或函数体执行的环境中，或者说调用一个匿名函数；返回的是当前正在被执行的Function对象；简单的来说就是当前执行环境的函数被调用时候，<code>arguments.callee</code>对象会指向与自身，就是当前的那个函数的引用；</p>
+<p>如下代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> count = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">var</span> test = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(count + <span class="string">" -- "</span> + (test.length == <span class="built_in">arguments</span>.callee.length) );</span><br><span class="line">    <span class="comment">// 打印出 1 -- true 2 -- true  3 -- true</span></span><br><span class="line">    <span class="keyword">if</span> (count++ &lt; <span class="number">3</span>) &#123;</span><br><span class="line">        <span class="comment">// 调用test()函数自身</span></span><br><span class="line">        <span class="built_in">arguments</span>.callee();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">test();</span><br></pre></td></tr></table></figure>
+<p><code>arguments.callee()</code>的含义是调用当前正在执行的函数自身，比如上面的test的匿名函数；</p>
+<h4 id="Function-prototype-bind介绍"><a href="#Function-prototype-bind介绍" class="headerlink" title="Function.prototype.bind介绍"></a>Function.prototype.bind介绍</h4><p>目前很多高级浏览器都支持<code>Function.prototype.bind</code>方法，该方法用来指定函数内部的<code>this</code>指向。为了支持各个浏览器，我们也可以自己来简单的模拟一个~</p>
+<p>如下代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span>(<span class="params">context</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> self = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> self.apply(context,<span class="built_in">arguments</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> yunxi = &#123;</span><br><span class="line">    name: <span class="string">'yunxi'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> func = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name); <span class="comment">// yunxi</span></span><br><span class="line">&#125;.bind(yunxi);</span><br><span class="line"></span><br><span class="line">func();</span><br></pre></td></tr></table></figure>
+<p>如上代码所示：<code>func</code>这个函数使用调用<code>bind</code>这个方法，并且把对象<code>yunxi</code>作为参数传进去，然后bind函数使用return返回一个函数，当我们调用func()执行这个方法的时候，其实我们就是在调用<code>bind</code>方法内的<code>return</code>返回的那个函数，在返回的那个函数内<code>context</code>的上下文其实就是我们以参数yunxi对象传进去的，因此<code>this</code>指针指向与<code>yunxi</code>这个对象了~ 所以打印出<code>this.name</code> 就是<code>yunxi</code>那个对象的<code>name</code>了;</p>
+<p>除了上面我们看到的介绍<code>apply</code>或者<code>call</code>方法可以改变<code>this</code>指针外，我们还可以使用<code>call</code>或者<code>apply</code>来继承对象的方法；实质也就是改变<code>this</code>的指针了；</p>
+<p>比如有如下代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Yunxi = <span class="function"><span class="keyword">function</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Longen = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    Yunxi.apply(<span class="keyword">this</span>,<span class="built_in">arguments</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Longen.prototype.getName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> longen = <span class="keyword">new</span> Longen(<span class="string">"tugenhua"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(longen.getName());  <span class="comment">// 打印出tugenhua</span></span><br></pre></td></tr></table></figure>
+<p>如上代码：我先实例化<code>Longen</code>这个对象，把参数传进去，之后使用<code>Yunxi.apply(this,arguments)</code>这句代码来改变<code>Longen</code>这个对象的<code>this</code>的指针，使他指向了<code>Yunxi</code>这个对象，因此<code>Yunxi</code>这个对象保存了<code>longen</code>这个实例化对象的参数<code>tugenhua</code>，因此当我们调用<code>longen.getName</code>这个方法的时候，我们返回<code>this.name</code>，即我们可以认为返回的是 <code>Yunxi.name</code> 因此返回的是 <code>tugenhua</code>，我们只是借用了下<code>Yunxi</code>这个对象内的<code>this.name</code>来保存<code>Longen</code>传进去的参数而已；</p>
+<h3 id="二：闭包的理解"><a href="#二：闭包的理解" class="headerlink" title="二：闭包的理解"></a>二：闭包的理解</h3><p>闭包的结构有如下2个特性</p>
+<ol>
+<li><p>封闭性：外界无法访问闭包内部的数据，如果在闭包内声明变量，外界是无法访问的，除非闭包主动向外界提供访问接口；</p>
+</li>
+<li><p>持久性：一般的函数，调用完毕之后，系统自动注销函数，而对于闭包来说，在外部函数被调用之后，闭包结构依然保存在</p>
+</li>
+</ol>
+<p>系统中，闭包中的数据依然存在，从而实现对数据的持久使用。</p>
+<p>缺点：</p>
+<p>使用闭包会占有内存资源，过多的使用闭包会导致内存溢出等.</p>
+<p>如下代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = x;</span><br><span class="line">    <span class="keyword">var</span> b = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> b = a(<span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(b()); <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+<p>首先在<code>a</code>函数内定义了2个变量，1个是存储参数，另外一个是闭包结构，在闭包结构中保存着<code>b</code>函数内的<code>a</code>变量，默认情况下，当<code>a</code>函数调用完之后<code>a</code>变量会自动销毁的，但是由于闭包的影响，闭包中使用了外界的变量，因此<code>a</code>变量会一直保存在内存当中，因此变量<code>a</code>参数没有随着<code>a</code>函数销毁而被释放，因此引申出闭包的缺点是：过多的使用闭包会占有内存资源，或内存溢出等肯能性；</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 经典的闭包实列如下：</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x</span>)</span>&#123;              <span class="comment">//外部函数</span></span><br><span class="line">    <span class="keyword">var</span> a = x;              <span class="comment">// 外部函数的局部变量，并传递参数</span></span><br><span class="line">    <span class="keyword">var</span> b = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;     <span class="comment">// 内部函数</span></span><br><span class="line">        <span class="keyword">return</span> a;           <span class="comment">// 访问外部函数中的局部变量</span></span><br><span class="line">    &#125;;</span><br><span class="line">    a++;                    <span class="comment">// 访问后，动态更新外部函数的变量</span></span><br><span class="line">    <span class="keyword">return</span> b;               <span class="comment">// 返回内部函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> c = f(<span class="number">5</span>);               <span class="comment">// 调用外部函数并且赋值</span></span><br><span class="line"><span class="built_in">console</span>.log(c());           <span class="comment">// 调用内部函数，返回外部函数更新后的值为6</span></span><br></pre></td></tr></table></figure>
+<p>下面我们来看看如下使用闭包的列子</p>
+<p>在如下代码中有2个函数，<code>f</code>函数的功能是：把数组类型的参数中每个元素的值分别封装在闭包结构中，然后把闭包存储在一个数组中，并返回这个数组，但是在函数e中调用函数f并向其传递一个数组<code>[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]</code>,然后遍历返回函数f返回数组，我们运行打印后发现都是<code>c undefined</code>，那是因为在执行f函数中的循环时候，把值虽然保存在<code>temp</code>中，但是每次循环后<code>temp</code>值在不断的变化，当<code>for</code>循环结束后，此时<code>temp</code>值为<code>c</code>，同时<code>i</code>变为3，因此当调用的时候 打印出来的是<code>temp</code>为3，<code>arrs[3</code>]变为<code>undefined</code>；因此打印出 <code>c undefined</code></p>
+<p>解决闭包的缺陷我们可以再在外面包一层函数，每次循环的时候，把<code>temp</code>参数和i参数传递进去 如代码二</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码一</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> arrs = [];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; x.length; i++) &#123;</span><br><span class="line">        <span class="keyword">var</span> temp = x[i];</span><br><span class="line">        arrs.push(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(temp + <span class="string">' '</span> +x[i]); <span class="comment">// c undefined</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> arrs;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">e</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> ar = f([<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>]);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>,ilen = ar.length; i &lt; ilen; i++) &#123;</span><br><span class="line">        ar[i]();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">e();</span><br><span class="line"><span class="comment">// 代码二：</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> arrs = [];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; x.length; i++) &#123;</span><br><span class="line">        <span class="keyword">var</span> temp = x[i];</span><br><span class="line">        (<span class="function"><span class="keyword">function</span>(<span class="params">temp,i</span>)</span>&#123;</span><br><span class="line">            arrs.push(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">                <span class="built_in">console</span>.log(temp + <span class="string">' '</span> +x[i]); <span class="comment">// c undefined</span></span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;)(temp,i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> arrs;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">e2</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> ar = f2([<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>]);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>,ilen = ar.length; i &lt; ilen; i++) &#123;</span><br><span class="line">        ar[i]();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">e2();</span><br></pre></td></tr></table></figure>
+<h3 id="三：javascript中的this详解"><a href="#三：javascript中的this详解" class="headerlink" title="三：javascript中的this详解"></a>三：javascript中的this详解</h3><p><code>this</code>的指向常见的有如下几点需要常用到：</p>
+<ul>
+<li>全局对象的<code>this</code>是指向与window；</li>
+<li>作为普通函数调用。</li>
+<li>作为对象方法调用。</li>
+<li>构造器调用。</li>
+<li><code>Function.prototype.call</code> 或 <code>Function.prototype.apply</code>调用。</li>
+</ul>
+<p>下面我们分别来介绍一下：</p>
+<h4 id="1-全局对象的this；"><a href="#1-全局对象的this；" class="headerlink" title="1. 全局对象的this；"></a>1. 全局对象的<code>this</code>；</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="keyword">this</span>); <span class="comment">// this指向于window</span></span><br><span class="line">setTimeout() 和 setInterval()函数内部的<span class="keyword">this</span>指针是指向于<span class="built_in">window</span>的，如下代码：</span><br><span class="line"> <span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">11</span>);</span><br><span class="line"> &#125;</span><br><span class="line"> setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span> === <span class="built_in">window</span>); <span class="comment">// true</span></span><br><span class="line">    <span class="keyword">this</span>.test(); <span class="comment">// 11</span></span><br><span class="line"> &#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="2-作为普通函数调用；"><a href="#2-作为普通函数调用；" class="headerlink" title="2. 作为普通函数调用；"></a>2. 作为普通函数调用；</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">"longen"</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(test()); <span class="comment">// longen</span></span><br></pre></td></tr></table></figure>
+<p class="tip">当作为普通函数调用时候，<code>this</code>总是指向了全局对象，在浏览器当中，全局对象一般指的是<code>window</code>；</p>
+
+<h4 id="3-作为对象的方法调用。"><a href="#3-作为对象的方法调用。" class="headerlink" title="3. 作为对象的方法调用。"></a>3. 作为对象的方法调用。</h4><p>如下代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    <span class="string">"name"</span>: <span class="string">"我的花名改为云溪了，就是为了好玩"</span>,</span><br><span class="line">    getName: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>); <span class="comment">// 在这里this指向于obj对象了</span></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>.name); <span class="comment">// 打印 我的花名改为云溪了，就是为了好玩</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">obj.getName(); <span class="comment">// 对象方法调用</span></span><br></pre></td></tr></table></figure>
+<p>但是呢，我们不能像如下一样调用对象了，如下调用对象的话，<code>this</code>还是执行了<code>window</code>，如下代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">"全局对象名字"</span>;</span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    <span class="string">"name"</span>: <span class="string">"我的花名改为云溪了，就是为了好玩"</span>,</span><br><span class="line">    getName: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>);  <span class="comment">// window</span></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>.name); <span class="comment">// 全局对象名字</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> yunxi = obj.getName;</span><br><span class="line">yunxi();</span><br></pre></td></tr></table></figure>
+<p>运行<code>yunxi()</code>函数，还是会像调用普通函数一样，<code>this</code>指向了<code>window</code>的；</p>
+<h4 id="4-构造器调用。"><a href="#4-构造器调用。" class="headerlink" title="4. 构造器调用。"></a>4. 构造器调用。</h4><p>Javascript中不像Java一样，有类的概念，而JS中只能通过构造器创建对象，通过<code>new</code> 对象，当<code>new</code>运算符调用函数时候，该函数会返回一个对象，一般情况下，构造器里面的this就是指向返回的这个对象；</p>
+<p>如下代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Obj = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = <span class="string">"yunxi"</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> test = <span class="keyword">new</span> Obj();</span><br><span class="line"><span class="built_in">console</span>.log(test.name); <span class="comment">// yunxi</span></span><br></pre></td></tr></table></figure>
+<p>注意：构造器函数第一个字母需要大写，这是为了区分普通函数还是构造器函数而言；</p>
+<p>如上代码：通过调用 <code>new Obj()</code>方法 返回值保存到<code>test</code>变量中，那么<code>test</code>就是那个对象了，所以内部的<code>this</code>就指向与test对象了，因此<code>test.name</code>就引用到了内部的<code>this.name</code> 即输出 <code>“yunxi”</code>字符串；</p>
+<p>但是也有例外的情况，比如构造器显示地返回了一个对象的话，那么这次继续调用的话，那么会最终会返回这个对象，比如如下代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = <span class="string">"yunxi"</span>;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">"age"</span>: <span class="string">"27"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> test = <span class="keyword">new</span> obj();</span><br><span class="line"><span class="built_in">console</span>.log(test.name); <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+<p>那么继续调用的话，会返回<code>unedfined</code>，因为返回的是那个对象，对象里面没有name这个属性，因此值为<code>undefined</code>；</p>
+<h3 id="四：理解函数引用和函数调用的区别"><a href="#四：理解函数引用和函数调用的区别" class="headerlink" title="四：理解函数引用和函数调用的区别"></a>四：理解函数引用和函数调用的区别</h3><p>看下面的代码分析:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 函数引用 代码一</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> x = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> a = f;</span><br><span class="line"><span class="keyword">var</span> b = f;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(a===b); <span class="comment">// true</span></span><br><span class="line"><span class="comment">// 函数调用 代码二</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> x = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> a2 = f2();</span><br><span class="line"><span class="keyword">var</span> b2 = f2();</span><br><span class="line"><span class="built_in">console</span>.log(a2 === b2);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数调用 代码三</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f3</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> x = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> a3 = f3();</span><br><span class="line"><span class="keyword">var</span> b3 = f3();</span><br><span class="line"><span class="built_in">console</span>.log(a3 === b3); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<p>如上的代码：代码一和代码二分部是函数引用和函数调用的列子，返回都为<code>true</code>，代码三也是函数调用的列子，返回且为<code>false</code></p>
+<p>我们现在来理解下函数引用和函数调用的本质区别：当引用函数时候，多个变量内存存储的是函数的相同的入口指针，因此对于同一个函数来讲，无论多少个变量引用，他们都是相等的，因为对于引用类型(对象，数组，函数等)都是比较的是内存地址，如果他们内存地址一样的话，说明是相同的；但是对于函数调用来讲，比如代码三;每次调用的时候，都被分配一个新的内存地址，所以他们的内存地址不相同，因此他们会返回<code>false</code>，但是对于代码二来讲，我们看到他们没有返回函数，只是返回数值，他们比较的不是内存地址，而是比较值，所以他们的值相等，因此他们也返回<code>true</code>，我们也可以看看如下实列化一个对象的列子，他们也被分配到不同的内存地址，因此他们也是返回<code>false</code>的；如下代码测试：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.x = <span class="number">5</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> F();</span><br><span class="line"><span class="keyword">var</span> b = <span class="keyword">new</span> F();</span><br><span class="line"><span class="built_in">console</span>.log(a === b); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<h3 id="五：理解js中的链式调用"><a href="#五：理解js中的链式调用" class="headerlink" title="五：理解js中的链式调用"></a>五：理解js中的链式调用</h3><p>我们使用jquery的时候，jquery的简单的语法及可实现链式调用方法，现在我们自己也封装一个链式调用的方法，来理解下 jquery中如何封装链式调用 无非就是每次调用一个方法的时候 给这个方法返回this即可，this指向该对象自身，我们看看代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一个简单的对象，每次调用对象的方法的时候，该方法都返回该对象自身</span></span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    a: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"输出a"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">    b:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"输出b"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(obj.a().b()); <span class="comment">// 输出a 输出b 输出this指向与obj这个对象</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 下面我们再看下 上面的通过Function扩展类型添加方法的demo如下：</span></span><br><span class="line"><span class="built_in">Function</span>.prototype.method = <span class="function"><span class="keyword">function</span>(<span class="params">name,func</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">this</span>.prototype[name]) &#123;</span><br><span class="line">        <span class="keyword">this</span>.prototype[name] = func;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">String</span>.method(<span class="string">'trim'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.replace(<span class="regexp">/^\s+|\s+$/g</span>,<span class="string">''</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">String</span>.method(<span class="string">'log2'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"链式调用"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">String</span>.method(<span class="string">'r'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.replace(<span class="regexp">/a/</span>,<span class="string">''</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> str = <span class="string">" abc "</span>;</span><br><span class="line"><span class="built_in">console</span>.log(str.trim().log2().r()); <span class="comment">// 输出链式调用和 bc</span></span><br></pre></td></tr></table></figure>
+<h3 id="六：理解使用函数实现历史记录–提高性能"><a href="#六：理解使用函数实现历史记录–提高性能" class="headerlink" title="六：理解使用函数实现历史记录–提高性能"></a>六：理解使用函数实现历史记录–提高性能</h3><p>函数可以使用对象去记住先前操作的结果，从而避免多余的运算。比如我们现在测试一个费波纳茨的算法，我们可以使用递归函数计算fibonacci数列，一个fibonacci数字是之前两个fibonacci数字之和，最前面的两个数字是0和1；代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> count = <span class="number">0</span>;</span><br><span class="line"> <span class="keyword">var</span> fibonacci = <span class="function"><span class="keyword">function</span>(<span class="params">n</span>) </span>&#123;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="keyword">return</span> n &lt; <span class="number">2</span> ? n : fibonacci(n<span class="number">-1</span>) + fibonacci(n<span class="number">-2</span>);</span><br><span class="line"> &#125;;</span><br><span class="line"> <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt;= <span class="number">10</span>; i+=<span class="number">1</span>) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(i+<span class="string">":"</span>+fibonacci(i));</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="built_in">console</span>.log(count); <span class="comment">// 453</span></span><br></pre></td></tr></table></figure>
+<p>我们可以看到如上 fibonacci函数总共调用了453次，for循环了11次，它自身调用了442次，如果我们使用下面的记忆函数的话，那么就可以减少他们的运算次数，从而提高性能；</p>
+<p>思路：先使用一个临时数组保存存储结果，当函数被调用的时候，先看是否已经有存储结果 如果有的话，就立即返回这个存储结果，否则的话，调用函数运算下；代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> count2 = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">var</span> fibonacci2 = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> memo = [<span class="number">0</span>,<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">var</span> fib = <span class="function"><span class="keyword">function</span>(<span class="params">n</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> result = memo[n];</span><br><span class="line">        count2++;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">typeof</span> result !== <span class="string">'number'</span>) &#123;</span><br><span class="line">            result = fib(n<span class="number">-1</span>) + fib(n<span class="number">-2</span>);</span><br><span class="line">            memo[n] = result;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> fib;</span><br><span class="line"> &#125;)();</span><br><span class="line"> <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="number">0</span>; j &lt;= <span class="number">10</span>; j+=<span class="number">1</span>) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(j+<span class="string">":"</span>+fibonacci2(j));</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="built_in">console</span>.log(count2); <span class="comment">// 29</span></span><br></pre></td></tr></table></figure>
+<p>这个函数也返回了同样的结果，但是只调用了函数29次，循环了11次，也就是说函数自身调用了18次，从而减少无谓的函数的调用及运算，下面我们可以把这个函数进行抽象化，以构造带记忆功能的函数，如下代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> count3 = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">var</span> memoizer = <span class="function"><span class="keyword">function</span>(<span class="params">memo,formula</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> recur = <span class="function"><span class="keyword">function</span>(<span class="params">n</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> result = memo[n];</span><br><span class="line">        count3++;   <span class="comment">// 这句代码只是说明运行函数多少次，在代码中并无作用，实际使用上可以删掉</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">typeof</span> result !== <span class="string">'number'</span>) &#123;</span><br><span class="line">            result = formula(recur,n);</span><br><span class="line">            memo[n] = result;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> recur;</span><br><span class="line"> &#125;;</span><br><span class="line"> <span class="keyword">var</span> fibonacci3 = memoizer([<span class="number">0</span>,<span class="number">1</span>],<span class="function"><span class="keyword">function</span>(<span class="params">recur,n</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> recur(n<span class="number">-1</span>) + recur(n<span class="number">-2</span>);</span><br><span class="line"> &#125;);</span><br><span class="line"> <span class="comment">// 调用方式如下</span></span><br><span class="line"> <span class="keyword">for</span>(<span class="keyword">var</span> k = <span class="number">0</span>; k &lt;=<span class="number">10</span>; k+=<span class="number">1</span>) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(k+<span class="string">":"</span>+fibonacci3(k));</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="built_in">console</span>.log(count3); <span class="comment">// 29</span></span><br></pre></td></tr></table></figure>
+<p>如上封装 memoizer 里面的参数是实现某个方法的计算公式，具体的可以根据需要自己手动更改，这边的思路无非就是想习惯使用对象去保存临时值，从而减少不必要的取值存储值的操作；</p>
+<h3 id="七：理解通过Function扩展类型"><a href="#七：理解通过Function扩展类型" class="headerlink" title="七：理解通过Function扩展类型"></a>七：理解通过Function扩展类型</h3><p>javascript 允许为语言的基本数据类型定义方法。通过Object.prototype添加原型方法，该方法可被所有的对象使用。</p>
+<p>这对函数，字符串，数字，正则和布尔值都适用，比如如下现在给Function.prototype增加方法，使该方法对所有函数都可用，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.method = <span class="function"><span class="keyword">function</span>(<span class="params">name,func</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">this</span>.prototype[name]) &#123;</span><br><span class="line">        <span class="keyword">this</span>.prototype[name] = func;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">Number</span>.method(<span class="string">'integer'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Math</span>[<span class="keyword">this</span> &lt; <span class="number">0</span> ? <span class="string">'ceil'</span> : <span class="string">'floor'</span>](<span class="keyword">this</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log((<span class="number">-10</span>/<span class="number">3</span>).integer()); <span class="comment">// -3</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">String</span>.method(<span class="string">'trim'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.replace(<span class="regexp">/^\s+|\s+$/g</span>,<span class="string">''</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">" abc "</span>.trim()); <span class="comment">// abc</span></span><br></pre></td></tr></table></figure>
+<h3 id="八：理解使用模块模式编写代码"><a href="#八：理解使用模块模式编写代码" class="headerlink" title="八：理解使用模块模式编写代码"></a>八：理解使用模块模式编写代码</h3><p>使用函数和闭包可以构建模块，所谓模块，就是一个提供接口却隐藏状态与实现的函数或对象。使用函数构建模块的优点是：减少全局变量的使用；</p>
+<p>比如如下：我想为<code>String</code>扩展一个方法，该方法的作用是寻找字符串中的<code>HTML</code>字符字体并将其替换为对应的字符；</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 如下代码：</span></span><br><span class="line"><span class="built_in">Function</span>.prototype.method = <span class="function"><span class="keyword">function</span>(<span class="params">name,func</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">this</span>.prototype[name]) &#123;</span><br><span class="line">        <span class="keyword">this</span>.prototype[name] = func;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">String</span>.method(<span class="string">'deentityify'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> entity = &#123;</span><br><span class="line">        quot: <span class="string">'"'</span>,</span><br><span class="line">        It: <span class="string">'&lt;'</span>,</span><br><span class="line">        gt: <span class="string">'&gt;'</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.replace(<span class="regexp">/&amp;([^&amp;;]+);/g</span>,<span class="function"><span class="keyword">function</span>(<span class="params">a,b</span>)</span>&#123;</span><br><span class="line">            <span class="keyword">var</span> r = entity[b];</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">typeof</span> r === <span class="string">'string'</span> ? r : a;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;());</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"&amp;It;&amp;quot;&amp;gt;"</span>.deentityify()); <span class="comment">// &lt;"&gt;</span></span><br></pre></td></tr></table></figure>
+<p>模块模式利用函数作用域和闭包来创建绑定对象与私有成员的关联，比如在上面的<code>deentityify()</code>方法才有权访问字符实体表<code>entity</code>这个数据对象；</p>
+<p>模块开发的一般形式是：定义了私有变量和函数的函数，利用闭包创建可以访问到的私有变量和函数的特权函数，最后返回这个特权函数，或把他们保存到可以访问的地方。</p>
+<p>模块模式一般会结合实例模式使用。javascript的实例就是使用对象字面量表示法创建的。对象的属性值可以是数值或者函数，并且属性值在该对象的生命周期中不会发生变化；比如如下代码属于模块模式：定义了一个私有变量name属性，和一个实例模式(对象字面量obj)并且返回这个对象字面量obj，对象字面量中的方法与私有变量name进行了绑定；</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 比如如下经典的模块模式</span></span><br><span class="line"><span class="keyword">var</span> MODULE = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> name = <span class="string">"tugenhua"</span>;</span><br><span class="line">    <span class="keyword">var</span> obj = &#123;</span><br><span class="line">        setName: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.name = name;</span><br><span class="line">        &#125;,</span><br><span class="line">        getName: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">&#125;)();</span><br><span class="line">MODULE.setName()</span><br><span class="line"><span class="built_in">console</span>.log(MODULE.getName()); <span class="comment">// tugenhua</span></span><br></pre></td></tr></table></figure>
+<h3 id="九：理解惰性实列化"><a href="#九：理解惰性实列化" class="headerlink" title="九：理解惰性实列化"></a>九：理解惰性实列化</h3><p>在页面中javascript初始化执行的时候就实例化类，如果在页面中没有使用这个实列化的对象，就会造成一定的内存浪费和性能损耗；这时候，我们可以使用惰性实列化来解决这个问题，惰性就是把实列化推迟到需要使用它的时候才去做，做到 “按需供应”;</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 惰性实列化代码如下</span></span><br><span class="line"><span class="keyword">var</span> myNamespace = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> Configure = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">var</span> privateName = <span class="string">"tugenhua"</span>;</span><br><span class="line">        <span class="keyword">var</span> privateGetName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> privateName;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">var</span> privateSetName = <span class="function"><span class="keyword">function</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">            privateName = name;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="comment">// 返回单列对象</span></span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            setName: <span class="function"><span class="keyword">function</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">                privateSetName(name);</span><br><span class="line">            &#125;,</span><br><span class="line">            getName: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">                <span class="keyword">return</span> privateGetName();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// 存储Configure实列</span></span><br><span class="line">    <span class="keyword">var</span> instance;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        init: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="comment">// 如果不存在实列，就创建单列实列</span></span><br><span class="line">            <span class="keyword">if</span>(!instance) &#123;</span><br><span class="line">                instance = Configure();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 创建Configure单列</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> instance) &#123;</span><br><span class="line">                <span class="keyword">if</span>(instance.hasOwnProperty(key)) &#123;</span><br><span class="line">                    <span class="keyword">this</span>[key] = instance[key];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">this</span>.init = <span class="literal">null</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;();</span><br><span class="line"><span class="comment">// 调用方式</span></span><br><span class="line">myNamespace.init();</span><br><span class="line"><span class="keyword">var</span> name = myNamespace.getName();</span><br><span class="line"><span class="built_in">console</span>.log(name); <span class="comment">// tugenhua</span></span><br></pre></td></tr></table></figure>
+<p>如上代码是惰性化实列代码：它包括一个单体Configure实列，直接返回init函数，先判断该单体是否被实列化，如果没有被实列化的话，则创建并执行实列化并返回该实列化，如果已经实列化了，则返回现有实列；执行完后，则销毁init方法，只初始化一次</p>
+<p>十：惰性载入函数（也是解决兼容问题的）<br>和上面分支的原理是一样的，代码也可以按照上面的推荐分支风格编码的；解决的问题也是解决多个if条件判断的；代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码如下：</span></span><br><span class="line"><span class="keyword">var</span> addEvent = <span class="function"><span class="keyword">function</span>(<span class="params">el,type,handler</span>)</span>&#123;</span><br><span class="line">    addEvent = el.addEventListener ? <span class="function"><span class="keyword">function</span>(<span class="params">el,type,handler</span>)</span>&#123;</span><br><span class="line">        el.addEventListener(type,handler,<span class="literal">false</span>);</span><br><span class="line">    &#125; : <span class="function"><span class="keyword">function</span>(<span class="params">el,type,handler</span>) </span>&#123;</span><br><span class="line">        el.attachEvent(<span class="string">"on"</span> + type,handler);</span><br><span class="line">    &#125;</span><br><span class="line">    addEvent(el,type,handler);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>惰性载入函数也是在函数内部改变自身的一种方式，在重复执行的时候就不会再进行检测的；惰性载入函数的分支只会执行一次，即第一次调用的时候，其优点如下：</p>
+<ol>
+<li><p>要执行的适当代码只有在实际调用函数时才执行。</p>
+</li>
+<li><p>第一次调用该函数的时候，紧接着内部函数也会执行，但是正因为这个，所以后续继续调用该函数的话，后续的调用速度会很快；因此避免了多重条件；</p>
+</li>
+</ol>
+<h3 id="十一：理解函数节流"><a href="#十一：理解函数节流" class="headerlink" title="十一：理解函数节流"></a>十一：理解函数节流</h3><p>DOM操作的交互需要更多的内存和CPU时间，连续进行过多的DOM相关的操作可能会导致浏览器变慢甚至崩溃，函数节流的设计思想是让某些代码可以在间断的情况下连续重复执行，实现该方法可以使用定时器对该函数进行节流操作;</p>
+<p>比如：第一次调用函数的时候，创建一个定时器，在指定的时间间隔下执行代码。当第二次执行的时候，清除前一次的定时器并设置另一个，将其替换成一个新的定时器;</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 如下简单函数节流代码演示</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">throttle</span>(<span class="params">method, context</span>) </span>&#123;</span><br><span class="line">    clearTimeout(method.tId);</span><br><span class="line">    method.tId = setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        method.call(context);</span><br><span class="line">    &#125;,<span class="number">500</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 执行操作</span></span><br><span class="line"><span class="built_in">window</span>.onresize = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    throttle(handle, <span class="built_in">window</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>函数节流解决的问题是一些代码(比如事件)无间断的执行，这可能会影响浏览器的性能，比如浏览器变慢或者直接崩溃。比如对于<code>mouseover</code>事件或者<code>click</code>事件，比如点击tab项菜单，无限的点击，有可能会导致浏览器会变慢操作，这时候我们可以使用函数节流的操作来解决；</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+      <div>
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i> 感谢您的阅读-------------</div>
+    
+</div>
+      </div>
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/基础知识/" rel="tag"><i class="fa fa-tag"></i> 基础知识</a>
+          
+            <a href="/tags/函数式编程/" rel="tag"><i class="fa fa-tag"></i> 函数式编程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/17/HTML_html全局属性（global_attribute） /" rel="prev" title="html全局属性（global_attribute）">
+                html全局属性（global_attribute） <i class="fa fa-chevron-left"></i>
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+
+            
+              <a href="/2018/04/17/综合_设计模式/" rel="next" title="综合-设计模式">
+                <i class="fa fa-chevron-right"></i> 综合-设计模式
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/bg.jpg" alt="Yin He Zhu">
+            
+              <p class="site-author-name" itemprop="name">Yin He Zhu</p>
+              <p class="site-description motion-element" itemprop="description">尹鹤珠的技术博客，前端杂货铺</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">83</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">97</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yinhezhu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:124104008@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一：理解call和apply-及arguments-callee"><span class="nav-number">1.</span> <span class="nav-text">一：理解call和apply 及arguments.callee</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#arguments-callee的理解"><span class="nav-number">1.1.</span> <span class="nav-text">arguments.callee的理解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Function-prototype-bind介绍"><span class="nav-number">1.2.</span> <span class="nav-text">Function.prototype.bind介绍</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二：闭包的理解"><span class="nav-number">2.</span> <span class="nav-text">二：闭包的理解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三：javascript中的this详解"><span class="nav-number">3.</span> <span class="nav-text">三：javascript中的this详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-全局对象的this；"><span class="nav-number">3.1.</span> <span class="nav-text">1. 全局对象的this；</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-作为普通函数调用；"><span class="nav-number">3.2.</span> <span class="nav-text">2. 作为普通函数调用；</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-作为对象的方法调用。"><span class="nav-number">3.3.</span> <span class="nav-text">3. 作为对象的方法调用。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-构造器调用。"><span class="nav-number">3.4.</span> <span class="nav-text">4. 构造器调用。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四：理解函数引用和函数调用的区别"><span class="nav-number">4.</span> <span class="nav-text">四：理解函数引用和函数调用的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五：理解js中的链式调用"><span class="nav-number">5.</span> <span class="nav-text">五：理解js中的链式调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#六：理解使用函数实现历史记录–提高性能"><span class="nav-number">6.</span> <span class="nav-text">六：理解使用函数实现历史记录–提高性能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#七：理解通过Function扩展类型"><span class="nav-number">7.</span> <span class="nav-text">七：理解通过Function扩展类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#八：理解使用模块模式编写代码"><span class="nav-number">8.</span> <span class="nav-text">八：理解使用模块模式编写代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#九：理解惰性实列化"><span class="nav-number">9.</span> <span class="nav-text">九：理解惰性实列化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#十一：理解函数节流"><span class="nav-number">10.</span> <span class="nav-text">十一：理解函数节流</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yin He Zhu</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('body');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("fWl7upiFX3fWezXSC2W9VNwx-gzGzoHsz", "AHiEA2CcxttYPXybKrYPOh1d");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+</html>

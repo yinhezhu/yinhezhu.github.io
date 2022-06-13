@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/apple-touch-icon-next.png?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="基础知识,https,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="https 原理入门一、WHY我们先不了聊HTTP，HTTPS，我们先从一个聊天软件说起，我们要实现A能发一个hello消息给B：  如果我们要实现这个聊天软件，本文只考虑安全性问题，要实现 A发给B的hello消息包，即使被中间人拦截到了，也无法得知消息的内容  二、HOW如何做到真正的安全？这个问题，很多人马上就想到了各种加密算法，什么对称加密、非对称加密、DES、RSA、XX、噼里啪啦~ 而">
+<meta name="keywords" content="基础知识,https">
+<meta property="og:type" content="article">
+<meta property="og:title" content="综合-HTTPS原理入门">
+<meta property="og:url" content="https://yinhezhu.github.com/2018/04/17/综合_HTTPS原理入门/index.html">
+<meta property="og:site_name" content="宽以待人">
+<meta property="og:description" content="https 原理入门一、WHY我们先不了聊HTTP，HTTPS，我们先从一个聊天软件说起，我们要实现A能发一个hello消息给B：  如果我们要实现这个聊天软件，本文只考虑安全性问题，要实现 A发给B的hello消息包，即使被中间人拦截到了，也无法得知消息的内容  二、HOW如何做到真正的安全？这个问题，很多人马上就想到了各种加密算法，什么对称加密、非对称加密、DES、RSA、XX、噼里啪啦~ 而">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http1.webp">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http2.webp">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http3.webp">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http4.webp">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http5.webp">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http6.webp">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http100.jpeg">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http7.webp">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http8.webp">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http9.webp">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http10.webp">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http11.webp">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http12.webp">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http13.webp">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http14.webp">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http15.webp">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http30.jpeg">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/http31.jpeg">
+<meta property="og:updated_time" content="2019-09-05T11:50:11.627Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="综合-HTTPS原理入门">
+<meta name="twitter:description" content="https 原理入门一、WHY我们先不了聊HTTP，HTTPS，我们先从一个聊天软件说起，我们要实现A能发一个hello消息给B：  如果我们要实现这个聊天软件，本文只考虑安全性问题，要实现 A发给B的hello消息包，即使被中间人拦截到了，也无法得知消息的内容  二、HOW如何做到真正的安全？这个问题，很多人马上就想到了各种加密算法，什么对称加密、非对称加密、DES、RSA、XX、噼里啪啦~ 而">
+<meta name="twitter:image" content="https://yinhezhu.github.com/static/img/http1.webp">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://yinhezhu.github.com/2018/04/17/综合_HTTPS原理入门/">
+
+
+
+
+
+  <title>综合-HTTPS原理入门 | 宽以待人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a target="_blank" href="https://github.com/yinhezhu" class="github-corner" aria-label="View source on Github"><svg width="92" height="92" viewbox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; z-index: 2020; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">宽以待人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yinhezhu.github.com/2018/04/17/综合_HTTPS原理入门/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yin He Zhu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/bg.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="宽以待人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">综合-HTTPS原理入门</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-17T15:11:56+08:00">
+                2018-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/综合/" itemprop="url" rel="index">
+                    <span itemprop="name">综合</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/04/17/综合_HTTPS原理入门/" class="leancloud_visitors" data-flag-title="综合-HTTPS原理入门">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="https-原理入门"><a href="#https-原理入门" class="headerlink" title="https 原理入门"></a><code>https</code> 原理入门</h2><h3 id="一、WHY"><a href="#一、WHY" class="headerlink" title="一、WHY"></a>一、WHY</h3><p>我们先不了聊<code>HTTP</code>，<code>HTTPS</code>，我们先从一个聊天软件说起，我们要实现A能发一个hello消息给B：</p>
+<p><img src="/static/img/http1.webp"></p>
+<p>如果我们要实现这个聊天软件，本文只考虑安全性问题，要实现</p>
+<p class="tip">A发给B的hello消息包，即使被中间人拦截到了，也无法得知消息的内容</p>
+
+<h3 id="二、HOW"><a href="#二、HOW" class="headerlink" title="二、HOW"></a>二、HOW</h3><h4 id="如何做到真正的安全？"><a href="#如何做到真正的安全？" class="headerlink" title="如何做到真正的安全？"></a>如何做到真正的安全？</h4><p>这个问题，很多人马上就想到了各种加密算法，什么对称加密、非对称加密、DES、RSA、XX、噼里啪啦~</p>
+<p>而我想说，加密算法只是解决方案，我们首先要做的是理解我们的问题——什么是安全？</p>
+<p>我个人的理解是：</p>
+<p class="tip">A与B通信的内容，有且只有A和B有能力看到通信的真正内容，<br>好！问题已经定义好了（现实中当然不止这一种定义）。对于解决方案，很容易就想到了对消息进行加密。</p>
+
+<p>题外话，但是只有这一种方法吗？我看未必，说不定在将来会出现一种物质打破当前世界的通信假设，实现真正意义上的保密。</p>
+<p>对于A与B这样的简单通信模型，我们很容易做出选择：</p>
+<p><img src="/static/img/http2.webp"></p>
+<p>这就是对称加密算法，其中图中的密钥S同时扮演加密和解密的角色。具体细节不是本文范畴。</p>
+<p>只要这个密钥S不公开给第三者，同时密钥S足够安全，我们就解决了我们一开始所定问题域了。因为世界上有且只有A与B知道如何加密和解密他们之间的消息。</p>
+<p>但是，在WWW环境下，我们的Web服务器的通信模型没有这么简单：</p>
+<p><img src="/static/img/http3.webp"></p>
+<p>如果服务器端对所有的客户端通信都使用同样的对称加密算法，无异于没有加密。那怎么办呢？即能使用对称加密算法，又不公开密钥？请读者思考21秒钟。😜</p>
+<p>答案是：Web服务器与每个客户端使用不同的对称加密算法：</p>
+<p><img src="/static/img/http4.webp"></p>
+<h4 id="如何确定对称加密算法"><a href="#如何确定对称加密算法" class="headerlink" title="如何确定对称加密算法"></a>如何确定对称加密算法</h4><p>慢着，另一个问题来了，我们的服务器端怎么告诉客户端该使用哪种对称加密算法？</p>
+<p>当然是通过协商。</p>
+<p><img src="/static/img/http5.webp"></p>
+<p>但是，你协商的过程是没有加密的，还是会被中间人拦截。那我们再对这个协商过程进行对称加密就好了，那你对协商过程加密的加密还是没有加密，怎么办？再加密不就好了……好吧，进行鸡生蛋蛋生鸡的问题了。</p>
+<h4 id="如何对协商过程进行加密"><a href="#如何对协商过程进行加密" class="headerlink" title="如何对协商过程进行加密"></a>如何对协商过程进行加密</h4><p>新问题来了，如何对协商过程进行加密？密码学领域中，有一种称为“非对称加密”的加密算法，特点是私钥加密后的密文，只要是公钥，都可以解密，但是公钥加密后的密文，只有私钥可以解密。私钥只有一个人有，而公钥可以发给所有的人。</p>
+<p><img src="/static/img/http6.webp"></p>
+<p>虽然服务器端向A、B……的方向还是不安全的，但是至少A、B向服务器端方向是安全的。</p>
+<p>好了，如何协商加密算法的问题，我们解决了：使用非对称加密算法进行对称加密算法协商过程。</p>
+<p>这下，你明白为什么<code>HTTPS</code>同时需要对称加密算法和非对称加密算法了吧？</p>
+<h4 id="协商什么加密算法"><a href="#协商什么加密算法" class="headerlink" title="协商什么加密算法"></a>协商什么加密算法</h4><p>要达到Web服务器针对每个客户端使用不同的对称加密算法，同时，我们也不能让第三者知道这个对称加密算法是什么，怎么办？</p>
+<p>使用随机数，就是使用随机数来生成对称加密算法。这样就可以做到服务器和客户端每次交互都是新的加密算法、只有在交互的那一该才确定加密算法。</p>
+<p>这下，你明白为什么<code>HTTPS</code>协议握手阶段会有这么多的随机数了吧。</p>
+<h4 id="如何得到公钥？"><a href="#如何得到公钥？" class="headerlink" title="如何得到公钥？"></a>如何得到公钥？</h4><p>细心的人可能已经注意到了如果使用非对称加密算法，我们的客户端A，B需要一开始就持有公钥，要不没法开展加密行为啊。</p>
+<p>这下，我们又遇到新问题了，如何让A、B客户端安全地得到公钥？</p>
+<p>我能想到的方案只有这些：</p>
+<p>方案1. 服务器端将公钥发送给每一个客户端</p>
+<p>方案2. 服务器端将公钥放到一个远程服务器，客户端可以请求得到</p>
+<p>我们选择方案1，因为方案2又多了一次请求，还要另外处理公钥的放置问题。</p>
+<h4 id="公钥被调包了怎么办？又是一个鸡生蛋蛋生鸡问题？"><a href="#公钥被调包了怎么办？又是一个鸡生蛋蛋生鸡问题？" class="headerlink" title="公钥被调包了怎么办？又是一个鸡生蛋蛋生鸡问题？"></a>公钥被调包了怎么办？又是一个鸡生蛋蛋生鸡问题？</h4><p>但是方案1有个问题：如果服务器端发送公钥给客户端时，被中间人调包了，怎么办？</p>
+<p>我画了张图方便理解：</p>
+<p><img src="/static/img/http100.jpeg"></p>
+<p>显然，让每个客户端的每个浏览器默认保存所有网站的公钥是不现实的。</p>
+<h4 id="使用第三方机构的公钥解决鸡生蛋蛋生鸡问题"><a href="#使用第三方机构的公钥解决鸡生蛋蛋生鸡问题" class="headerlink" title="使用第三方机构的公钥解决鸡生蛋蛋生鸡问题"></a>使用第三方机构的公钥解决鸡生蛋蛋生鸡问题</h4><p>公钥被调包的问题出现，是因为我们的客户端无法分辨返回公钥的人到底是中间人，还是真的服务器。这其实就是密码学中提的身份验证问题。</p>
+<p>如果让你来解决，你怎么解决？如果你了解过<code>HTTPS</code>，会知道使用数字证书来解决。但是你想过证书的本质是什么么？请放下你对<code>HTTPS</code>已有的知识，自己尝试找到解决方案。</p>
+<p>我是这样解决的。既然服务器需要将公钥传给客户端，这个过程本身是不安全，那么我们为什么不对这个过程本身再加密一次？可是，你是使用对称加密，还是非对称加密？这下好了，我感觉又进了鸡生蛋蛋生鸡问题了。</p>
+<p>问题的难点是如果我们选择直接将公钥传递给客户端的方案，我们始终无法解决公钥传递被中间人调包的问题。</p>
+<p>所以，我们不能直接将服务器的公钥传递给客户端，而是第三方机构使用它的私钥对我们的公钥进行加密后，再传给客户端。客户端再使用第三方机构的公钥进行解密。</p>
+<p>下图就是我们设计的第一版“数字证书”，证书中只有服务器交给第三方机构的公钥，而且这个公钥被第三方机构的私钥加密了：</p>
+<p><img src="/static/img/http7.webp"></p>
+<p>如果能解密，就说明这个公钥没有被中间人调包。因为如果中间人使用自己的私钥加密后的东西传给客户端，客户端是无法使用第三方的公钥进行解密的。</p>
+<p><img src="/static/img/http8.webp"></p>
+<p>话到此，我以为解决问题了。但是现实中<code>HTTPS</code>，还有一个数字签名的概念，我没法理解它的设计理由。</p>
+<p>原来，我漏掉了一个场景：第三方机构不可能只给你一家公司制作证书，它也可能会给中间人这样有坏心思的公司发放证书。这样的，中间人就有机会对你的证书进行调包，客户端在这种情况下是无法分辨出是接收的是你的证书，还是中间人的。因为不论中间人，还是你的证书，都能使用第三方机构的公钥进行解密。像下面这样：</p>
+<p>第三方机构向多家公司颁发证书的情况：</p>
+<p><img src="/static/img/http9.webp"></p>
+<p>客户端能解密同一家第三机构颁发的所有证书：</p>
+<p><img src="/static/img/http10.webp"></p>
+<p>最终导致其它持有同一家第三方机构证书的中间人可以进行调包：</p>
+<p><img src="/static/img/http11.webp"></p>
+<h4 id="数字签名，解决同一机构颁发的不同证书被篡改问题"><a href="#数字签名，解决同一机构颁发的不同证书被篡改问题" class="headerlink" title="数字签名，解决同一机构颁发的不同证书被篡改问题"></a>数字签名，解决同一机构颁发的不同证书被篡改问题</h4><p>要解决这个问题，我们首先要想清楚一个问题，辨别同一机构下不同证书的这个职责，我们应该放在哪？</p>
+<p>只能放到客户端了。意思是，客户端在拿到证书后，自己就有能力分辨证书是否被篡改了。如何才能有这个能力呢？</p>
+<p>我们从现实中找灵感。比如你是HR，你手上拿到候选人的学历证书，证书上写了持证人，颁发机构，颁发时间等等，同时证书上，还写有一个最重要的：证书编号！我们怎么鉴别这张证书是的真伪呢？只要拿着这个证书编号上相关机构去查，如果证书上的持证人与现实的这个候选人一致，同时证书编号也能对应上，那么就说明这个证书是真实的。</p>
+<p>我们的客户端能不能采用这个机制呢？像这样：</p>
+<p><img src="/static/img/http12.webp"></p>
+<p>可是，这个“第三方机构”到底是在哪呢？是一个远端服务？不可能吧？如果是个远端服务，整个交互都会慢了。所以，这个第三方机构的验证功能只能放在客户端的本地了。</p>
+<h4 id="客户端本地怎么验证证书呢？"><a href="#客户端本地怎么验证证书呢？" class="headerlink" title="客户端本地怎么验证证书呢？"></a>客户端本地怎么验证证书呢？</h4><p class="tip">下边的说明并不完全准确，总之，客户端有验证证书是否合法的能力</p>
+
+<p>客户端本地怎么验证证书呢？答案是证书本身就已经告诉客户端怎么验证证书的真伪。</p>
+<p>也就是证书上写着如何根据证书的内容生成证书编号。客户端拿到证书后根据证书上的方法自己生成一个证书编号，如果生成的证书编号与证书上的证书编号相同，那么说明这个证书是真实的。</p>
+<p>同时，为避免证书编号本身又被调包，所以使用第三方的私钥进行加密。</p>
+<p>这地方有些抽象，我们来个图帮助理解：</p>
+<p>证书的制作如图所示。证书中的“编号生成方法MD5”就是告诉客户端：你使用MD5对证书的内容求值就可以得到一个证书编号。</p>
+<p><img src="/static/img/http13.webp"></p>
+<p>当客户端拿到证书后，开始对证书中的内容进行验证，如果客户端计算出来的证书编号与证书中的证书编号相同，则验证通过：</p>
+<p><img src="/static/img/http14.webp"></p>
+<p>但是第三方机构的公钥怎么跑到了客户端的机器中呢？世界上这么多机器。</p>
+<p>其实呢，现实中，浏览器和操作系统都会维护一个权威的第三方机构列表（包括它们的公钥）。因为客户端接收到的证书中会写有颁发机构，客户端就根据这个颁发机构的值在本地找相应的公钥。</p>
+<p>题外话：如果浏览器和操作系统这道防线被破了，就没办法。想想当年自己装过的非常规XP系统，都害怕。<br>说到这里，想必大家已经知道上文所说的，证书就是<code>HTTPS</code>中数字证书，证书编号就是数字签名，而第三方机构就是指数字证书签发机构（CA）。</p>
+<h4 id="CA如何颁发数字证书给服务器端的？"><a href="#CA如何颁发数字证书给服务器端的？" class="headerlink" title="CA如何颁发数字证书给服务器端的？"></a>CA如何颁发数字证书给服务器端的？</h4><p>当我听到这个问题时，我误以为，我们的SERVER需要发网络请求到CA部门的服务器来拿这个证书。😭 到底是我理解能力问题，还是。。</p>
+<p>其实，问题应该是CA如何颁发给我们的网站管理员，而我们的管理员又如何将这个数字证书放到我们的服务器上。</p>
+<p>我们如何向CA申请呢？每个CA机构都大同小异，我在网上找了一个：</p>
+<p><img src="/static/img/http15.webp"></p>
+<p>拿到证书后，我们就可以将证书配置到自己的服务器上了。那么如何配置？这是具体细节了，留给大家google了。</p>
+<h4 id="也许我们需要整理一下思路"><a href="#也许我们需要整理一下思路" class="headerlink" title="也许我们需要整理一下思路"></a>也许我们需要整理一下思路</h4><p>我们通过推算的方式尝试还原<code>HTTPS</code>的设计过程。这样，我们也就明白了为什么<code>HTTPS</code>比HTTP多那么多次的交互，为什么<code>HTTPS</code>的性能会差，以及找到<code>HTTPS</code>的性能优化点。</p>
+<p>而上面一大堆工作都是为了让客户端与服务器端安全地协商出一个对称加密算法。这就是<code>HTTPS</code>中的SSL/TLS协议主要干的活。剩下的就是通信时双方使用这个对称加密算法进行加密解密。</p>
+<p>以下是一张<code>HTTPS</code>协议的真实交互图（从网上copy的，忘了从哪了，如果侵权麻烦告知）：</p>
+<p><img src="/static/img/http30.jpeg"></p>
+<h4 id="能不能用一句话总结HTTPS？"><a href="#能不能用一句话总结HTTPS？" class="headerlink" title="能不能用一句话总结HTTPS？"></a>能不能用一句话总结<code>HTTPS</code>？</h4><p>答案是不能，因为<code>HTTPS</code>本身实在太复杂。但是我还是尝试使用一段话来总结<code>HTTPS</code>:</p>
+<p><code>HTTPS</code>要使客户端与服务器端的通信过程得到安全保证，必须使用的对称加密算法，但是协商对称加密算法的过程，需要使用非对称加密算法来保证安全，然而直接使用非对称加密的过程本身也不安全，会有中间人篡改公钥的可能性，所以客户端与服务器不直接使用公钥，而是使用数字证书签发机构颁发的证书来保证非对称加密过程本身的安全。这样通过这些机制协商出一个对称加密算法，就此双方使用该算法进行加密解密。从而解决了客户端与服务器端之间的通信安全问题。</p>
+<h3 id="三、WHAT"><a href="#三、WHAT" class="headerlink" title="三、WHAT"></a>三、WHAT</h3><h4 id="HTTPS的缺点"><a href="#HTTPS的缺点" class="headerlink" title="HTTPS的缺点"></a><code>HTTPS</code>的缺点</h4><ul>
+<li><p>SEO方面：据ACM CoNEXT数据显示，使用<code>HTTPS</code>协议会使页面的加载时间延长近50%，增加10%到20%的耗电，此外，<code>HTTPS</code>协议还会影响缓存，增加数据开销和功耗，甚至已有安全措施也会受到影响也会因此而受到影响。</p>
+</li>
+<li><p>经济方面：SSL证书需要钱，功能越强大的证书费用越高，个人网站、小网站没有必要一般不会用;<br><code>HTTPS</code>连接缓存不如HTTP高效，大流量网站如非必要也不会采用，流量成本太高;</p>
+</li>
+<li><p><code>HTTPS</code>连接服务器端资源占用高很多，支持访客稍多的网站需要投入更大的成本，如果全部采用<code>HTTPS</code>，基于大部分计算资源闲置的假设的VPS的平均成本会上去;</p>
+</li>
+<li><p><code>HTTPS</code>协议握手阶段比较费时，对网站的相应速度有负面影响，如非必要，没有理由牺牲用户体验。</p>
+</li>
+</ul>
+<h4 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a>中间人攻击</h4><p>在密码学和计算机安全领域中，中间人攻击（英语：<code>Man-in-the-middle attack</code>，缩写：<code>MITM</code>）是指攻击者与通讯的两端分别创建独立的联系，并交换其所收到的数据，使通讯的两端认为他们正在通过一个私密的连接与对方直接对话，但事实上整个会话都被攻击者完全控制。在中间人攻击中，攻击者可以拦截通讯双方的通话并插入新的内容。在许多情况下这是很简单的（例如，在一个未加密的Wi-Fi 无线接入点的接受范围内的中间人攻击者，可以将自己作为一个中间人插入这个网络）。</p>
+<p>一个中间人攻击能成功的前提条件是攻击者能将自己伪装成每一个参与会话的终端，并且不被其他终端识破。中间人攻击是一个（缺乏）相互认证的攻击。大多数的加密协议都专门加入了一些特殊的认证方法以阻止中间人攻击。例如，SSL协议可以验证参与通讯的一方或双方使用的证书是否是由权威的受信任的数字证书认证机构颁发，并且能执行双向身份认证。</p>
+<p><img src="/static/img/http31.jpeg"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+      <div>
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i> 感谢您的阅读-------------</div>
+    
+</div>
+      </div>
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/基础知识/" rel="tag"><i class="fa fa-tag"></i> 基础知识</a>
+          
+            <a href="/tags/https/" rel="tag"><i class="fa fa-tag"></i> https</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/17/综合_基础题/" rel="prev" title="综合-设计模式">
+                综合-设计模式 <i class="fa fa-chevron-left"></i>
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+
+            
+              <a href="/2018/04/17/综合_HTTP协议入门/" rel="next" title="综合-HTTP协议入门">
+                <i class="fa fa-chevron-right"></i> 综合-HTTP协议入门
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/bg.jpg" alt="Yin He Zhu">
+            
+              <p class="site-author-name" itemprop="name">Yin He Zhu</p>
+              <p class="site-description motion-element" itemprop="description">尹鹤珠的技术博客，前端杂货铺</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">83</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">97</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yinhezhu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:124104008@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#https-原理入门"><span class="nav-number">1.</span> <span class="nav-text">https 原理入门</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、WHY"><span class="nav-number">1.1.</span> <span class="nav-text">一、WHY</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、HOW"><span class="nav-number">1.2.</span> <span class="nav-text">二、HOW</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如何做到真正的安全？"><span class="nav-number">1.2.1.</span> <span class="nav-text">如何做到真正的安全？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何确定对称加密算法"><span class="nav-number">1.2.2.</span> <span class="nav-text">如何确定对称加密算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何对协商过程进行加密"><span class="nav-number">1.2.3.</span> <span class="nav-text">如何对协商过程进行加密</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#协商什么加密算法"><span class="nav-number">1.2.4.</span> <span class="nav-text">协商什么加密算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何得到公钥？"><span class="nav-number">1.2.5.</span> <span class="nav-text">如何得到公钥？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#公钥被调包了怎么办？又是一个鸡生蛋蛋生鸡问题？"><span class="nav-number">1.2.6.</span> <span class="nav-text">公钥被调包了怎么办？又是一个鸡生蛋蛋生鸡问题？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用第三方机构的公钥解决鸡生蛋蛋生鸡问题"><span class="nav-number">1.2.7.</span> <span class="nav-text">使用第三方机构的公钥解决鸡生蛋蛋生鸡问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数字签名，解决同一机构颁发的不同证书被篡改问题"><span class="nav-number">1.2.8.</span> <span class="nav-text">数字签名，解决同一机构颁发的不同证书被篡改问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端本地怎么验证证书呢？"><span class="nav-number">1.2.9.</span> <span class="nav-text">客户端本地怎么验证证书呢？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CA如何颁发数字证书给服务器端的？"><span class="nav-number">1.2.10.</span> <span class="nav-text">CA如何颁发数字证书给服务器端的？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#也许我们需要整理一下思路"><span class="nav-number">1.2.11.</span> <span class="nav-text">也许我们需要整理一下思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#能不能用一句话总结HTTPS？"><span class="nav-number">1.2.12.</span> <span class="nav-text">能不能用一句话总结HTTPS？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、WHAT"><span class="nav-number">1.3.</span> <span class="nav-text">三、WHAT</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTPS的缺点"><span class="nav-number">1.3.1.</span> <span class="nav-text">HTTPS的缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中间人攻击"><span class="nav-number">1.3.2.</span> <span class="nav-text">中间人攻击</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yin He Zhu</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('body');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("fWl7upiFX3fWezXSC2W9VNwx-gzGzoHsz", "AHiEA2CcxttYPXybKrYPOh1d");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+</html>

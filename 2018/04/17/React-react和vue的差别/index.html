@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/apple-touch-icon-next.png?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="React,不同技术栈,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Vue与React的对比Vue.js与React.js从某些反面来说很相似，通过两个框架的学习，有时候对一些用法会有一点思考，为加深学习的思索，特翻阅了两个文档，从以下各方面进行了对比，加深了对这两个框架的认知。 1.数据绑定1.1 Vue中有关数据绑定的部分 vue是双向绑定， Vue.js 最核心的功能有两个，一是响应式的数据绑定系统，二是组件系统。所谓双向绑定，指的是Vue实例中的data与">
+<meta name="keywords" content="React,不同技术栈">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React_react和vue的差别">
+<meta property="og:url" content="https://yinhezhu.github.com/2018/04/17/React-react和vue的差别/index.html">
+<meta property="og:site_name" content="宽以待人">
+<meta property="og:description" content="Vue与React的对比Vue.js与React.js从某些反面来说很相似，通过两个框架的学习，有时候对一些用法会有一点思考，为加深学习的思索，特翻阅了两个文档，从以下各方面进行了对比，加深了对这两个框架的认知。 1.数据绑定1.1 Vue中有关数据绑定的部分 vue是双向绑定， Vue.js 最核心的功能有两个，一是响应式的数据绑定系统，二是组件系统。所谓双向绑定，指的是Vue实例中的data与">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/3333422-04ea055c73c50c98.png">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/lifecycle.png">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/flow.png">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/20150625201409735.png">
+<meta property="og:image" content="https://yinhezhu.github.com/static/img/vuex%20(1).png">
+<meta property="og:updated_time" content="2018-05-07T11:01:55.492Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React_react和vue的差别">
+<meta name="twitter:description" content="Vue与React的对比Vue.js与React.js从某些反面来说很相似，通过两个框架的学习，有时候对一些用法会有一点思考，为加深学习的思索，特翻阅了两个文档，从以下各方面进行了对比，加深了对这两个框架的认知。 1.数据绑定1.1 Vue中有关数据绑定的部分 vue是双向绑定， Vue.js 最核心的功能有两个，一是响应式的数据绑定系统，二是组件系统。所谓双向绑定，指的是Vue实例中的data与">
+<meta name="twitter:image" content="https://yinhezhu.github.com/static/img/3333422-04ea055c73c50c98.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://yinhezhu.github.com/2018/04/17/React-react和vue的差别/">
+
+
+
+
+
+  <title>React_react和vue的差别 | 宽以待人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a target="_blank" href="https://github.com/yinhezhu" class="github-corner" aria-label="View source on Github"><svg width="92" height="92" viewbox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; z-index: 2020; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">宽以待人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yinhezhu.github.com/2018/04/17/React-react和vue的差别/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yin He Zhu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/bg.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="宽以待人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">React_react和vue的差别</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-17T16:32:25+08:00">
+                2018-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/React/" itemprop="url" rel="index">
+                    <span itemprop="name">React</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/04/17/React-react和vue的差别/" class="leancloud_visitors" data-flag-title="React_react和vue的差别">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Vue与React的对比"><a href="#Vue与React的对比" class="headerlink" title="Vue与React的对比"></a>Vue与React的对比</h1><p><code>Vue.js</code>与<code>React.js</code>从某些反面来说很相似，通过两个框架的学习，有时候对一些用法会有一点思考，为加深学习的思索，特翻阅了两个文档，从以下各方面进行了对比，加深了对这两个框架的认知。</p>
+<h2 id="1-数据绑定"><a href="#1-数据绑定" class="headerlink" title="1.数据绑定"></a>1.数据绑定</h2><h3 id="1-1-Vue中有关数据绑定的部分"><a href="#1-1-Vue中有关数据绑定的部分" class="headerlink" title="1.1 Vue中有关数据绑定的部分"></a>1.1 Vue中有关数据绑定的部分</h3><ul>
+<li>vue是双向绑定， <code>Vue.js</code> 最核心的功能有两个，一是响应式的数据绑定系统，二是组件系统。所谓双向绑定，指的是<code>Vue</code>实例中的data与其渲染的DOM元素的内容保持一致，无论谁被改变，另一方会相应的更新为相同的数据。这是通过设置属性访问器实现的。</li>
+<li>在<code>Vue</code>中，与数据绑定有关的有 <code>插值表达式、指令系统、*Class和Style、事件处理器和表单空间、ajax请求和计算属性</code></li>
+</ul>
+<h4 id="1-1-1插值表达式"><a href="#1-1-1插值表达式" class="headerlink" title="1.1.1插值表达式"></a>1.1.1插值表达式</h4><p>插值和指令又称为模板语法</p>
+<ul>
+<li>数据绑定最常见的形式就是使用<code>“Mustache”</code>语法 (双大括号) 的文本插值</li>
+<li><code>Mustache</code> 语法不能作用在 <code>HTML</code> 特性上，遇到这种情况应该使用 <code>v-bind</code> 指令</li>
+</ul>
+<h4 id="1-1-2-指令"><a href="#1-1-2-指令" class="headerlink" title="1.1.2 指令"></a>1.1.2 指令</h4><ul>
+<li><p><code>Vue</code>中的指令很方便，指令 (Directives) 是带有 <code>v-</code> 前缀的特殊属性。指令属性的值预期是单个 <code>JavaScript</code> 表达式 (<code>v-for</code> 是例外情况，稍后我们再讨论)。指令的职责是，当表达式的值改变时，将其产生的连带影响，响应式地作用于 <code>DOM</code>。</p>
+</li>
+<li><p><code>Vue</code>中的12个指令： <code>v-bind,v-once,v-model,v-text,v-html,v-on,v-if,v-else,v-show,v-for,v-pre,v-clock</code></p>
+</li>
+</ul>
+<h4 id="1-1-3-class与style绑定"><a href="#1-1-3-class与style绑定" class="headerlink" title="1.1.3 class与style绑定"></a>1.1.3 class与style绑定</h4><ul>
+<li>数据绑定的一个常见需求是操作元素的 <code>class 列表和它的内联样式。因为它们都是属性 ，我们可以用</code>v-bind<code>处理它们：只需要计算出表达式最终的字符串。不过，字符串拼接麻烦又易错。因此，在</code>v-bind<code>用于</code>class<code>和</code>style<code>时，</code>Vue.js` 专门增强了它。表达式的结果类型除了字符串之外，还可以是对象或数组。</li>
+<li>对象语法<ul>
+<li>我们可以传给 <code>v-bind:class</code> 一个对象，以动态地切换 <code>class</code></li>
+</ul>
+</li>
+<li>数组语法<ul>
+<li>我们可以把一个数组传给 <code>v-bind:class</code>，以应用一个 <code>class</code> 列表：</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div v-bind:<span class="class"><span class="keyword">class</span></span>=<span class="string">"[activeClass, errorClass]"</span>&gt;&lt;<span class="regexp">/div&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="1-1-4-条件渲染和列表渲染"><a href="#1-1-4-条件渲染和列表渲染" class="headerlink" title="1.1.4 条件渲染和列表渲染"></a>1.1.4 条件渲染和列表渲染</h4><ul>
+<li><code>v-if</code>条件渲染一组数</li>
+<li>我们用 <code>v-for</code> 指令根据一组数组的选项列表进行渲染。<code>v-for</code> 指令需要使用 <code>item in items</code> 形式的特殊语法，<code>items</code> 是源数据数组并且 <code>item</code> 是数组元素迭代的别名。</li>
+</ul>
+<h4 id="1-1-5-事件处理器"><a href="#1-1-5-事件处理器" class="headerlink" title="1.1.5 事件处理器"></a>1.1.5 事件处理器</h4><ul>
+<li>通过<code>v-on</code>给元素注册事件</li>
+<li>使用 <code>v-on</code> 有几个好处：<ul>
+<li>扫一眼 <code>HTML</code> 模板便能轻松定位在 <code>JavaScript</code> 代码里对应的方法。</li>
+<li>因为你无须在 <code>JavaScript</code> 里手动绑定事件，你的 <code>ViewModel</code> 代码可以是非常纯粹的逻辑，和 <code>DOM</code> 完全解耦，更易于测试。</li>
+<li>当一个 <code>ViewModel</code> 被销毁时，所有的事件处理器都会自动被删除。你无须担心如何自己清理它们。</li>
+</ul>
+</li>
+</ul>
+<h4 id="1-1-6-表单控件"><a href="#1-1-6-表单控件" class="headerlink" title="1.1.6 表单控件"></a>1.1.6 表单控件</h4><ul>
+<li><code>v-model</code>在表单控件元素上创建双向数据绑定</li>
+<li>它会根据控件类型自动选取正确的方法来更新元素。</li>
+</ul>
+<h4 id="1-1-7-计算属性"><a href="#1-1-7-计算属性" class="headerlink" title="1.1.7 计算属性"></a>1.1.7 计算属性</h4><ul>
+<li>在<code>Vue</code>中引入了计算属性来处理模板中放入太多的逻辑会让模板过重且难以维护的问题，这样不但解决了上面的问题，而且也同时让模板和业务逻辑更好的分离。</li>
+<li>简单来说，假如<code>data</code>里面有属性<code>a=1</code>，然后你需要一个变量跟着<code>a</code>变化，例如<code>b=a+1</code>，那么就需要用到计算属性，<code>Vue</code>实例的<code>computed</code>属性中，设置<code>b</code>为其属性，其表现为一个函数，返回值是<code>b</code>的值。</li>
+</ul>
+<h4 id="1-1-8-ajax数据请求"><a href="#1-1-8-ajax数据请求" class="headerlink" title="1.1.8 ajax数据请求"></a>1.1.8 ajax数据请求</h4><ul>
+<li><code>vue2.0</code>中数据请求推荐使用<code>axios</code></li>
+</ul>
+<p>注： <code>关于vue的数据双向绑定和单向数据流</code></p>
+<ul>
+<li><p><code>Vue</code> 的依赖追踪是【原理上不支持双向绑定，<code>v-model</code> 只是通过监听 <code>DOM</code> 事件实现的语法糖】</p>
+</li>
+<li><p><code>Vue</code>的依赖追踪是通过 <code>Object.defineProperty</code> 把<code>data</code>对象的属性全部转为 <code>getter/setter</code>来实现的；当改变数据的某个属性值时，会触发<code>set</code>函数,获取该属性值的时候会触发<code>get</code>函数，通过这个特性来实现改变数据时改变视图；也就是说只有当数据改变时才会触发视图的改变，反过来在操作视图时，只能通过DOM事件来改变数据，再由此来改变视图，以此来实现双向绑定</p>
+</li>
+<li><p>双向绑定是在同一个组件内，将数据和视图绑定起来，和父子组件之间的通信并无什么关联；</p>
+</li>
+<li>组件之间的通信采用单向数据流是为了组件间更好的解耦，在开发中可能有多个子组件依赖于父组件的某个数据，假如子组件可以修改父组件数据的话，一个子组件变化会引发所有依赖这个数据的子组件发生变化，所以<code>vue</code>不推荐子组件修改父组件的数据，直接修改<code>props</code>会抛出警告</li>
+</ul>
+<h3 id="1-2-react没有数据双向绑定"><a href="#1-2-react没有数据双向绑定" class="headerlink" title="1.2 react没有数据双向绑定"></a>1.2 <code>react</code>没有数据双向绑定</h3><ul>
+<li><code>react</code>是单向数据流</li>
+<li><code>react</code>中通过将<code>state</code>（Model层）与<code>View</code>层数据进行双向绑定达数据的实时更新变化，具体来说就是在<code>View</code>层直接写<code>JS</code>代码<code>Model</code>层中的数据拿过来渲染，一旦像表单操作、触发事件、<code>ajax</code>请求等触发数据变化，则进行双同步</li>
+</ul>
+<h4 id="1-2-1事件处理"><a href="#1-2-1事件处理" class="headerlink" title="1.2.1事件处理"></a>1.2.1事件处理</h4><ul>
+<li><p><code>React</code> 元素的事件处理和 <code>DOM</code>元素的很相似。但是有一点语法上的不同:</p>
+<ul>
+<li><code>React</code>事件绑定属性的命名采用驼峰式写法，而不是小写。</li>
+<li>如果采用 <code>JSX</code> 的语法你需要传入一个函数作为事件处理函数，而不是一个字符串(<code>DOM</code>元素的写法)</li>
+<li>在 <code>React</code> 中另一个不同是你不能使用返回 false 的方式阻止默认行为。你必须明确的使用 preventDefault。</li>
+<li><p>当你使用 ES6 class 语法来定义一个组件的时候，事件处理器会成为类的一个方法。一般需要显式的绑定<code>this</code>，例如</p>
+<p><code>this.handleClick = this.handleClick.bind(this);</code></p>
+</li>
+<li><p>你必须谨慎对待 <code>JSX</code> 回调函数中的 <code>this</code>，类的方法默认是不会绑定 <code>this</code> 的。如果你忘记绑定 <code>this.handleClick</code> 并把它传入 <code>onClick</code>, 当你调用这个函数的时候 <code>this</code> 的值会是 <code>undefined</code>。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="1-2-2-条件渲染"><a href="#1-2-2-条件渲染" class="headerlink" title="1.2.2 条件渲染"></a>1.2.2 条件渲染</h4><ul>
+<li><code>React</code> 中的条件渲染和 <code>JavaScript</code> 中的一致，使用 <code>JavaScript</code> 操作符 <code>if</code> 或条件运算符来创建表示当前状态的元素，然后让 <code>React</code> 根据它们来更新 UI。</li>
+<li>你可以通过用花括号包裹代码在 <code>JSX</code> 中嵌入任何表达式 ，也包括 <code>JavaScript</code> 的逻辑与 &amp;&amp;，它可以方便地条件渲染一个元素。之所以能这样做，是因为在 <code>JavaScript</code> 中，<code>true &amp;&amp; expression</code> 总是返回 <code>expression</code>，而 <code>false &amp;&amp; expression</code> 总是返回 <code>false</code>。因此，如果条件是 <code>true</code>，&amp;&amp; 右侧的元素就会被渲染，如果是 <code>false</code>，<code>React</code> 会忽略并跳过它。</li>
+<li>条件渲染的另一种方法是使用 <code>JavaScript</code> 的条件运算符 <code>condition ? true : false</code>。</li>
+</ul>
+<h4 id="1-2-3-列表渲染"><a href="#1-2-3-列表渲染" class="headerlink" title="1.2.3 列表渲染"></a>1.2.3 列表渲染</h4><ul>
+<li>你可以通过使用{}在<code>JSX</code>内构建一个元素集合，使用<code>Javascript</code>中的<code>map()</code>方法循遍历数组</li>
+<li>Keys可以在<code>DOM</code>中的某些元素被增加或删除的时候帮助<code>React</code>识别哪些元素发生了变化。因此你应当给数组中的每一个元素赋予一个确定的标识。一个元素的key最好是这个元素在列表中拥有的一个独一无二的字符串。通常，我们使用来自数据的id作为元素的key。</li>
+</ul>
+<h4 id="1-2-4-表单操作"><a href="#1-2-4-表单操作" class="headerlink" title="1.2.4 表单操作"></a>1.2.4 表单操作</h4><ul>
+<li><code>HTML</code>表单元素与<code>React</code>中的其他<code>DOM</code>元素有所不同,因为表单元素生来就保留一些内部状态。</li>
+<li>当用户提交表单时，<code>HTML</code>的默认行为会使这个表单会跳转到一个新页面。在<code>React</code>中亦是如此。但大多数情况下，我们都会构造一个处理提交表单并可访问用户输入表单数据的函数。实现这一点的标准方法是使用一种称为“受控组件”的技术。其值由<code>React</code>控制的输入表单元素称为“受控组件”。<code>this.setState({value: event.target.value})</code>;</li>
+<li>当你有处理多个受控的input元素时，你可以通过给每个元素添加一个name属性，来让处理函数根据 <code>event.target.name</code>的值来选择做什么。</li>
+</ul>
+<h4 id="1-2-5-状态提升"><a href="#1-2-5-状态提升" class="headerlink" title="1.2.5 状态提升"></a>1.2.5 状态提升</h4><ul>
+<li>在<code>React</code>中，状态分享是通过将<code>state</code>数据提升至离需要这些数据的组件最近的父组件来完成的。这就是所谓的状态提升。<code>this.props.xxx</code></li>
+<li>在<code>React</code>应用中，对应任何可变数据理应只有一个单一“数据源”。通常，状态都是首先添加在需要渲染数据的组件中。此时，如果另一个组件也需要这些数据，你可以将数据提升至离它们最近的父组件中。你应该在应用中保持 自上而下的数据流，而不是尝试在不同组件中同步状态。</li>
+</ul>
+<h2 id="2-组件化以及组件数据流"><a href="#2-组件化以及组件数据流" class="headerlink" title="2.组件化以及组件数据流"></a>2.组件化以及组件数据流</h2><h3 id="2-1-React中的组件及数据流"><a href="#2-1-React中的组件及数据流" class="headerlink" title="2.1 React中的组件及数据流"></a>2.1 <code>React</code>中的组件及数据流</h3><ul>
+<li><code>React</code>是单向数据流，数据主要从父节点传递到子节点（通过<code>props</code>）。如果顶层（父级）的某个<code>props</code>改变了，<code>React</code>会重渲染所有的子节点。</li>
+<li><code>React</code>中实现组件有两种实现方式，一种是createClass方法，另一种是通过ES2015的思想类继承<code>React</code>.Component来实现</li>
+<li>在<code>React</code>应用中，按钮、表单、对话框、整个屏幕的内容等，这些通常都被表示为组件。</li>
+<li><code>React</code>推崇的是函数式编程和单向数据流：给定原始界面（或数据），施加一个变化，就能推导出另外一个状态（界面或者数据的更新）</li>
+<li>组件可以将UI切分成一些的独立的、可复用的部件，这样你就只需专注于构建每一个单独的部件。组件从概念上看就像是函数，它可以接收任意的输入值（称之为“<code>props</code>”），并返回一个需要在页面上展示的<code>React</code>元素。<br><code>1. props的只读性</code></li>
+<li>无论是使用函数或是类来声明一个组件，它决不能修改它自己的<code>props</code>。</li>
+<li>所有的<code>React</code>组件必须像纯函数那样使用它们的<code>props</code>。</li>
+</ul>
+<h4 id="props与state的区别"><a href="#props与state的区别" class="headerlink" title="props与state的区别"></a><code>props</code>与<code>state</code>的区别</h4><ul>
+<li><code>props</code>是property的缩写，可以理解为<code>HTML</code>标签的attribute。不可以使用<code>this.props</code>直接修改<code>props</code>，因为<code>props</code>是只读的，<code>props</code>是用于整个组件树中传递数据和配置。在当前组件访问<code>props</code>，使用<code>this.props</code>。</li>
+<li><code>props</code>是一个组件的设置参数，可以在父控件中选择性设置。父组件对子控件的<code>props</code>进行赋值，并且<code>props</code>的值不可改变。一个子控件自身不能改变自己的 <code>props</code>。</li>
+<li><code>state</code>:当一个组件 mounts的时候，<code>state</code>如果设置有默认值的会被使用，并且<code>state</code>可能时刻的被改变。一个子控件自身可以管理自己的<code>state</code>，但是需要注意的是，无法管理其子控件的<code>state</code>。所以可以认为，<code>state</code>是子控件自身私有的。</li>
+<li>每个组件都有属于自己的<code>state</code>，<code>state</code>和<code>props</code>的区别在于前者(<code>state</code>)只存在于组件内部，只能从当前组件调用<code>this.setState</code>修改<code>state</code>值（不可以直接修改<code>this.state</code>！）。</li>
+<li><code>props</code>是一个父组件传递给子组件的数据流，可以一直的被传递到子孙组件中。然而 <code>state</code>代表的是子组件自身的内部状态。从语义上讲，改变组件的状态，可能会导致<code>DOM</code>结构的改变或者重新渲染。而<code>props</code>是父组件传递的参数，所以可以被用于初始化渲染和改变组件自身的状态，虽然大多数时候组件的状态是又外部事件触发改变的。我们需要知道的是，无论是<code>state</code>改变，还是父组件传递的 <code>props</code>改变，render方法都可能会被执行。</li>
+<li>一般我们更新子组件都是通过改变<code>state</code>值，更新新子组件的<code>props</code>值从而达到更新。</li>
+</ul>
+<h4 id="2-1-1-组件之间的通信"><a href="#2-1-1-组件之间的通信" class="headerlink" title="2.1.1 组件之间的通信"></a>2.1.1 组件之间的通信</h4><p>父子组件数通信<br>父与子之间通<code>props</code>属性进行传递<br>子与父之间，父组件定义事件，子组件触发父组件中的事件时，通过实参的形式来改变父组件中的数据来通信<br>即：</p>
+<ul>
+<li>父组件更新组件状态 —–<code>props</code>—–&gt;　子组件更新</li>
+<li>子组件更新父组件状态 —–需要父组件传递回调函数—–&gt; 子组件调用触发</li>
+</ul>
+<p>非父子组件之间的通信，嵌套不深的非父子组件可以使共同父组件，触发事件函数传形参的方式来实现<br>兄弟组件：<br>（1） 按照<code>React</code>单向数据流方式，我们需要借助父组件进行传递，通过父组件回调函数改变兄弟组件的<code>props</code>。</p>
+<ul>
+<li>其实这种实现方式与子组件更新父组件状态的方式是大同小异的。</li>
+</ul>
+<p>（2） 当组件层次很深的时候，在这里，<code>React</code>官方给我们提供了一种上下文方式，可以让子组件直接访问祖先的数据或函数，无需从祖先组件一层层地传递数据到子组件中。</p>
+<h4 id="2-1-2-组件的生命周期"><a href="#2-1-2-组件的生命周期" class="headerlink" title="2.1.2 组件的生命周期"></a>2.1.2 组件的生命周期</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">construtor() <span class="comment">//创建组件</span></span><br><span class="line">componentWillMount() <span class="comment">//组件挂载之前</span></span><br><span class="line">componentDidMount() <span class="comment">// 组件挂载之后</span></span><br><span class="line">componentWillReceiveProps() <span class="comment">// 父组件发生render的时候子组件调用该函数</span></span><br><span class="line">shouldComponentUpdate() <span class="comment">// 组件挂载之后每次调用setState后都会调用该函数判断是否需要重新渲染组件，默认返回true</span></span><br><span class="line">componentDidUpdate() <span class="comment">// 更新</span></span><br><span class="line">render() <span class="comment">//渲染，`React`中的核心函数</span></span><br><span class="line">componentWillUnmount() <span class="comment">//组件被卸载的时候调用，一般在componentDidMount注册的事件需要在这里删除</span></span><br></pre></td></tr></table></figure>
+<p><img src="/static/img/3333422-04ea055c73c50c98.png" width="800"></p>
+<h3 id="2-2-Vue中的组件和数据流"><a href="#2-2-Vue中的组件和数据流" class="headerlink" title="2.2 Vue中的组件和数据流"></a>2.2 <code>Vue</code>中的组件和数据流</h3><h4 id="2-2-1-组件化应用构建"><a href="#2-2-1-组件化应用构建" class="headerlink" title="2.2.1 组件化应用构建"></a>2.2.1 组件化应用构建</h4><ul>
+<li>组件系统是 <code>Vue</code> 的另一个重要概念，因为它是一种抽象，允许我们使用小型、独立和通常可复用的组件构建大型应用。</li>
+<li>在 <code>Vue</code> 里，一个组件本质上是一个拥有预定义选项的一个 <code>Vue</code> 实例</li>
+<li>在一个大型应用中，有必要将整个应用程序划分为组件，以使开发可管理。</li>
+<li>组件(component)是 <code>Vue</code> 最强大的功能之一。组件可以帮助你扩展基本的 <code>HTML</code> 元素，以封装可重用代码。在较高层面上，组件是 <code>Vue</code> 编译器附加行为后的自定义元素。在某些情况下，组件也可以是原生 <code>HTML</code> 元素的形式，以特定的 <code>is</code> 特性扩展。</li>
+<li>组件中，data必须是一个函数</li>
+<li>组件可以扩展 <code>HTML</code> 元素，封装可重用的代码。在较高层面上，组件是自定义元素，<code>Vue.js</code> 的编译器为它添加特殊功能。在有些情况下，组件也可以是原生 <code>HTML</code> 元素的形式，以 is 特性扩展。</li>
+</ul>
+<h4 id="2-2-2-响应式"><a href="#2-2-2-响应式" class="headerlink" title="2.2.2 响应式"></a>2.2.2 响应式</h4><ul>
+<li>当一个 <code>Vue</code> 实例被创建时，它向 <code>Vue</code> 的响应式系统中加入了其 <code>data</code> 对象中能找到的所有的属性。当这些属性的值发生改变时，视图将会产生“响应”，即匹配更新为新的值。</li>
+<li>当这些数据改变时，视图会进行重渲染。值得注意的是只有当实例被创建时 <code>data</code> 中存在的属性是响应式的。</li>
+</ul>
+<h4 id="2-2-3-组件的生命周期"><a href="#2-2-3-组件的生命周期" class="headerlink" title="2.2.3 组件的生命周期"></a>2.2.3 组件的生命周期</h4><ul>
+<li>每个 <code>Vue</code> 实例在被创建之前都要经过一系列的初始化过程。例如需要设置数据监听、编译模板、挂载实例到 <code>DOM</code>、在数据变化时更新 <code>DOM</code> 等。同时在这个过程中也会运行一些叫做生命周期钩子的函数，给予用户机会在一些特定的场景下添加他们自己的代码。</li>
+<li>比如 <code>created</code> 钩子可以用来在一个实例被创建之后执行代码，也有一些其它的钩子，在实例生命周期的不同场景下调用，如 <code>mounted、updated、destroyed</code>。钩子的 <code>this</code> 指向调用它的 <code>Vue</code> 实例。</li>
+<li>生命周期图示：<br><img src="/static/img/lifecycle.png" width="600"></li>
+</ul>
+<h4 id="2-2-3-组件之间的通信"><a href="#2-2-3-组件之间的通信" class="headerlink" title="2.2.3 组件之间的通信"></a>2.2.3 组件之间的通信</h4><ul>
+<li><code>Vue</code>默认的是单向数据流，这是<code>Vue</code>直接提出来说明的，父组件默认可以向子组件传递数据，但是子组件向父组件传递数据就需要额外设置了。</li>
+<li><code>Vue</code> 也支持双向绑定，默认为单向绑定，数据从父组件单向传给子组件。在大型应用中使用单向绑定让数据流易于理解。</li>
+<li>父子组件之间的数据通信是通过<code>Prop</code>和自定义事件实现的，而非父子组件可以使用订阅/发布模式实现（类似于Angualr中的非父子指令之间的通信），再复杂一点也是建议使用状态管理（<code>Vuex</code>）。</li>
+<li>在 <code>Vue</code> 中，父子组件之间的关系可以概述为：<code>props</code> 向下，<code>events</code> 向上。父组件通过 <code>props</code> 向下传递数据给子组件，子组件通过 <code>events</code> 发送消息给父组件。</li>
+</ul>
+<h5 id="1-父向子"><a href="#1-父向子" class="headerlink" title="1.父向子"></a>1.父向子</h5><ul>
+<li>每个组件实例都有自己的孤立隔离作用域。也就是说，不能（也不应该）直接在子组件模板中引用父组件数据。要想在子组件模板中引用父组件数据，可以使用 <code>props</code> 将数据向下传递到子组件。</li>
+<li>每个 <code>prop</code> 属性,都可以控制是否从父组件的自定义属性中接收数据。子组件需要使用 <code>props</code> 选项显式声明 <code>props</code>，以便它可以从父组件接收到期望的数据。</li>
+<li>动态<code>props</code>，类似于将一个普通属性绑定到一个表达式，我们还可以使用 <code>v-bind</code> 将 <code>props</code> 属性动态地绑定到父组件中的数据。无论父组件何时更新数据，都可以将数据向下流入到子组件中</li>
+</ul>
+<h5 id="2-子向父"><a href="#2-子向父" class="headerlink" title="2.子向父"></a>2.子向父</h5><ul>
+<li>使用自定义事件</li>
+<li>每个 <code>Vue</code> 实例都接入了一个事件接口<code>(events interface)</code>，也就是说，这些 <code>Vue</code> 实例可以做到：</li>
+<li>使用 <code>on(eventName)</code>监听一个事件−使用<code>emit(eventName)</code> 触发一个事件</li>
+</ul>
+<h5 id="3-非父子组件通信"><a href="#3-非父子组件通信" class="headerlink" title="3. 非父子组件通信"></a>3. 非父子组件通信</h5><ul>
+<li>可以使用一个空的 <code>Vue</code> 实例作为一个事件总线中心<code>(central event bus)</code>，用<code>emit</code>触发事件，<code>on</code>监听事件</li>
+</ul>
+<h4 id="2-2-4-单向数据流"><a href="#2-2-4-单向数据流" class="headerlink" title="2.2.4 单向数据流"></a>2.2.4 单向数据流</h4><p>单向数据流示意图：<br><img src="/static/img/flow.png" width="600"></p>
+<h2 id="3-状态管理"><a href="#3-状态管理" class="headerlink" title="3.状态管理"></a>3.状态管理</h2><h3 id="3-1-React中的状态管理：Flux"><a href="#3-1-React中的状态管理：Flux" class="headerlink" title="3.1 React中的状态管理：Flux"></a>3.1 <code>React</code>中的状态管理：<code>Flux</code></h3><ul>
+<li><p><code>Redux</code> 是 <code>React</code> 生态环境中最流行的 <code>Flux</code> 实现。<code>Redux</code> 事实上无法感知视图层，所以它能够轻松的通过一些简单绑定和 <code>Vue</code> 一起使用。</p>
+<p>  1、创建<code>actions</code></p>
+<pre><code>1、定义动作，事件触发需要用`dispatcher`来调用
+2、行为，如增加操作、删除操作、更新操作，就是一堆函数。
+</code></pre><p>  2、创建<code>store</code></p>
+<pre><code>1、`store`中包含应用的状态和逻辑，用来管理应用中不同的状态和逻辑，相当于`Model`层
+</code></pre><p>  3、创建<code>dispatcher</code></p>
+<pre><code>1、在`dispatcher`中通过`register`来给每个`action`注对应的的`store`中的方法
+</code></pre><p>  4、在<code>view</code>层调用<code>action</code>中的方法</p>
+<pre><code>1、就是各类`component`
+</code></pre></li>
+</ul>
+<p><img src="/static/img/20150625201409735.png" width="800"></p>
+<h3 id="3-2-Vue中的状态管理vuex"><a href="#3-2-Vue中的状态管理vuex" class="headerlink" title="3.2 Vue中的状态管理vuex"></a>3.2 <code>Vue</code>中的状态管理<code>vuex</code></h3><ul>
+<li><code>Vuex</code>借鉴了 Flux、Redux、和 The Elm Architecture。与其他模式不同的是，<code>Vuex</code> 是专门为 <code>Vue.js</code> 设计的状态管理库，以利用 <code>Vue.js</code> 的细粒度数据响应机制来进行高效的状态更新。这使得它能够更好地和 Vue 进行整合，同时提供简洁的 API 和改善过的开发体验。</li>
+<li><p>组件不允许直接修改属于 <code>store</code> 实例的 <code>state</code>，而应执行 action 来分发 (dispatch) 事件通知 <code>store</code> 去改变，我们最终达成了 Flux 架构。这样约定的好处是，我们能够记录所有 <code>store</code> 中发生的 <code>state</code> 改变，同时实现能做到记录变更 (mutation)、保存状态快照、历史回滚/时光旅行的先进的调试工具。</p>
+</li>
+<li><p>每一个 <code>Vuex</code> 应用的核心就是 <code>store</code>（仓库）。“<code>store</code>”基本上就是一个容器，它包含着你的应用中大部分的状态</p>
+</li>
+<li><p><code>Vuex</code> 和单纯的全局对象有以下两点不同：</p>
+<pre><code>1、`Vue`x 的状态存储是响应式的。当 `Vue` 组件从 `store` 中读取状态的时候，若 `store` 中的状态发生变化，那么相应的组件也会相应地得到高效更新。
+
+2、你不能直接改变 `store` 中的状态。改变 `store` 中的状态的唯一途径就是显式地提交 (commit) mutation。这样使得我们可以方便地跟踪每一个状态的变化，从而让我们能够实现一些工具帮助我们更好地了解我们的应用。
+
+3、`state`
+</code></pre></li>
+<li><p><code>Vuex</code> 使用单一状态树——是的，用一个对象就包含了全部的应用层级状态。至此它便作为一个“唯一数据源 (SSOT)”而存在。这也意味着，每个应用将仅仅包含一个 <code>store</code> 实例。单一状态树让我们能够直接地定位任一特定的状态片段，在调试的过程中也能轻易地取得整个当前应用状态的快照。这也意味着，每个应用将仅仅包含一个 <code>store</code> 实例。</p>
+<pre><code>1、Getters
+</code></pre></li>
+<li><p>从<code>state</code>中获取状态值，有时候我们需要从 <code>store</code> 中的 <code>state</code> 中派生出一些状态，例如对列表进行过滤并计数。</p>
+<pre><code>1、Mutation
+    1、更改 `Vuex` 的 `store` 中的状态的唯一方法是提交 mutation。`Vuex` 中的 mutation 非常类似于事件：每个 mutation 都有一个字符串的 事件类型 (type) 和 一个 回调函数 (handler)。这个回调函数就是我们实际进行状态更改的地方，并且它会接受 `state` 作为第一个参数。
+    2、你不能直接调用一个 mutation handler。这个选项更像是事件注册：“当触发一个类型为 increment 的 mutation 时，调用此函数。”要唤醒一个 mutation handler，你需要以相应的 type 调用 `store.commit` 方法
+
+2、Action
+
+    1、Action 类似于 mutation，不同在于：
+
+    2、Action 提交的是 mutation，而不是直接变更状态。
+
+    3、Action 可以包含任意异步操作。
+    4、dispatch分发action
+
+3、Module
+</code></pre></li>
+<li><p>由于使用单一状态树，应用的所有状态会集中到一个比较大的对象。当应用变得非常复杂时，<code>store</code> 对象就有可能变得相当臃肿。</p>
+</li>
+<li><code>Vuex</code> 允许我们将 <code>store</code> 分割成模块（module）。每个模块拥有自己的 <code>state、mutation、action、getter</code>、甚至是嵌套子模块——从上至下进行同样方式的分割</li>
+</ul>
+<p><img src="/static/img/vuex (1).png" width="600"></p>
+<h2 id="4-路由"><a href="#4-路由" class="headerlink" title="4.路由"></a>4.路由</h2><ul>
+<li>两者的路由很相似，都是利用了组件化思想<h3 id="4-1-React中的路由"><a href="#4-1-React中的路由" class="headerlink" title="4.1 React中的路由"></a>4.1 <code>React</code>中的路由</h3></li>
+<li>在路由库的问题上，<code>React</code> 选择把问题交给社区维护，因此创建了一个更分散的生态系统。但相对的，<code>React</code> 的生态系统相比 <code>Vue</code> 更加繁荣。</li>
+<li><code>React</code>中，需要引入<code>react-router</code>库，<br>使用时，路由器Router就是<code>React</code>的一个组件。</li>
+<li>Router组件本身只是一个容器，真正的路由要通过Route组件定义。</li>
+<li><p>Route组件定义了URL路径与组件的对应关系。你可以同时使用多个Route组件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;Router history=&#123;hashHistory&#125;&gt;</span><br><span class="line">  &lt;Route path=<span class="string">"/"</span> component=&#123;App&#125;/&gt;</span><br><span class="line">  &lt;Route path=<span class="string">"/repos"</span> component=&#123;Repos&#125;/&gt;</span><br><span class="line">  &lt;Route path=<span class="string">"/about"</span> component=&#123;About&#125;/&gt;</span><br><span class="line">&lt;<span class="regexp">/Router&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Link组件用于取代元素，生成一个链接，允许用户点击后跳转到另一个路由。它基本上就是元素的<code>React</code> 版本，可以接收Router的状态。</p>
+</li>
+</ul>
+<h3 id="4-2-Vue中的路由"><a href="#4-2-Vue中的路由" class="headerlink" title="4.2 Vue中的路由"></a>4.2 <code>Vue</code>中的路由</h3><ul>
+<li>Vue 的路由库和状态管理库都是由官方维护支持且与核心库同步更新的。</li>
+<li>使用 <code>Vue.js</code> ，我们已经可以通过组合组件来组成应用程序，当你要把 vue-router 添加进来，我们需要做的是，将组件(components)映射到路由(routes)，然后告诉 vue-router 在哪里渲染它们。</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello App!<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 使用 router-link 组件来导航. --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 通过传入 `to` 属性指定链接. --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- &lt;router-link&gt; 默认会被渲染成一个 `&lt;a&gt;` 标签 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">router-link</span> <span class="attr">to</span>=<span class="string">"/foo"</span>&gt;</span>Go to Foo<span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">router-link</span> <span class="attr">to</span>=<span class="string">"/bar"</span>&gt;</span>Go to Bar<span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 路由出口 --&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 路由匹配到的组件将渲染在这里 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">router-view</span>&gt;</span><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="5-渲染性能对比"><a href="#5-渲染性能对比" class="headerlink" title="5. 渲染性能对比"></a>5. 渲染性能对比</h2><ul>
+<li>在操作界面时，要尽量减少对<code>DOM</code>的操作，<code>Vue</code> 和 <code>React</code> 都使用虚拟<code>DOM</code>来实现，并且两者工作一样好。</li>
+<li>尽量减少除<code>DOM</code>操作以外的其他操作。（<code>Vue</code>和<code>React</code>的不同）</li>
+</ul>
+<h3 id="5-1-React视图渲染"><a href="#5-1-React视图渲染" class="headerlink" title="5.1 React视图渲染"></a>5.1 <code>React</code>视图渲染</h3><ul>
+<li><p><code>React</code> 的渲染建立在 Virtual <code>DOM</code> 上——一种在内存中描述 <code>DOM</code> 树状态的数据结构。当状态发生变化时，<code>React</code> 重新渲染 Virtual <code>DOM</code>，比较计算之后给真实 <code>DOM</code> 打补丁。</p>
+</li>
+<li><p>Virtual <code>DOM</code> 提供了函数式的方法描述视图，它不使用数据观察机制，每次更新都会重新渲染整个应用，因此从定义上保证了视图与数据的同步。它也开辟了 JavaScript 同构应用的可能性。</p>
+</li>
+<li><p>在超大量数据的首屏渲染速度上，<code>React</code> 有一定优势，因为 <code>Vue</code> 的渲染机制启动时候要做的工作比较多，而且 <code>React</code> 支持服务端渲染。</p>
+</li>
+<li><p>元素是构成 <code>React</code> 应用的最小单位。元素用来描述你在屏幕上看到的内容，与浏览器的 <code>DOM</code> 元素不同，<code>React</code> 当中的元素事实上是普通的对象，<code>React</code> <code>DOM</code> 可以确保 浏览器 <code>DOM</code> 的数据内容与 <code>React</code> 元素保持一致。</p>
+</li>
+<li><p>我们用<code>React</code> 开发应用时一般只会定义一个根节点。但如果你是在一个已有的项目当中引入 <code>React</code> 的话，你可能会需要在不同的部分单独定义 <code>React</code> 根节点。我们将 元素传入一个名为 <code>ReactDOM.render()</code> 的方法来将其渲染到页面上，页面上就会显示该元素。</p>
+</li>
+</ul>
+<h4 id="组件渲染"><a href="#组件渲染" class="headerlink" title="组件渲染"></a>组件渲染</h4><ul>
+<li>当<code>React</code>遇到的元素是用户自定义的组件，它会将<code>JSX</code>属性作为单个对象传递给该组件,这个对象称之为“<code>props</code>”。</li>
+</ul>
+<h3 id="5-2-Vue视图渲染"><a href="#5-2-Vue视图渲染" class="headerlink" title="5.2 Vue视图渲染"></a>5.2 <code>Vue</code>视图渲染</h3><ul>
+<li><p><code>Vue</code> 通过建立一个虚拟 <code>DOM</code> 对真实 <code>DOM</code> 发生的变化保持追踪。</p>
+</li>
+<li><p><code>Vue</code>渲染的过程如下：</p>
+<ul>
+<li><code>new Vue</code>，执行初始化</li>
+<li>挂载<code>$mount</code>方法，通过自定义<code>Render</code>方法、<code>template、el</code>等生成<code>Render</code>函数</li>
+<li>通过Watcher监听数据的变化</li>
+<li>当数据发生变化时，<code>Render</code>函数执行生成<code>VNode</code>对象</li>
+<li>通过<code>patch</code>方法，对比新旧<code>VNode</code>对象，通过<code>DOM Diff</code>算法，添加、修改、删除真正的<code>DOM</code>元素</li>
+</ul>
+</li>
+</ul>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>总结一下，我们发现，</p>
+<h3 id="Vue的优势包括："><a href="#Vue的优势包括：" class="headerlink" title="Vue的优势包括："></a><code>Vue</code>的优势包括：</h3><ul>
+<li>模板和渲染函数的弹性选择</li>
+<li>简单的语法及项目创建</li>
+<li>更快的渲染速度和更小的体积<h3 id="React的优势包括："><a href="#React的优势包括：" class="headerlink" title="React的优势包括："></a><code>React</code>的优势包括：</h3></li>
+<li>更适用于大型应用和更好的可测试性</li>
+<li>同时适用于Web端和原生App</li>
+<li>更大的生态圈带来的更多支持和工具</li>
+</ul>
+<h4 id="而实际上，React和Vue都是非常优秀的框架，它们之间的相似之处多过不同之处，并且它们大部分最棒的功能是相通的："><a href="#而实际上，React和Vue都是非常优秀的框架，它们之间的相似之处多过不同之处，并且它们大部分最棒的功能是相通的：" class="headerlink" title="而实际上，React和Vue都是非常优秀的框架，它们之间的相似之处多过不同之处，并且它们大部分最棒的功能是相通的："></a>而实际上，<code>React</code>和<code>Vue</code>都是非常优秀的框架，它们之间的相似之处多过不同之处，并且它们大部分最棒的功能是相通的：</h4><ul>
+<li>利用虚拟<code>DOM</code>实现快速渲染</li>
+<li>轻量级</li>
+<li>响应式和组件化</li>
+<li>服务器端渲染</li>
+<li>易于集成路由工具，打包工具以及状态管理工具</li>
+<li>优秀的支持和社区</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+      <div>
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i> 感谢您的阅读-------------</div>
+    
+</div>
+      </div>
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/React/" rel="tag"><i class="fa fa-tag"></i> React</a>
+          
+            <a href="/tags/不同技术栈/" rel="tag"><i class="fa fa-tag"></i> 不同技术栈</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/17/jQuery-源码分析/" rel="prev" title="jQuery_源码分析_整体架构">
+                jQuery_源码分析_整体架构 <i class="fa fa-chevron-left"></i>
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+
+            
+              <a href="/2018/04/17/Vue_vue数据监听原理/" rel="next" title="Vue_vue数据监听原理">
+                <i class="fa fa-chevron-right"></i> Vue_vue数据监听原理
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/bg.jpg" alt="Yin He Zhu">
+            
+              <p class="site-author-name" itemprop="name">Yin He Zhu</p>
+              <p class="site-description motion-element" itemprop="description">尹鹤珠的技术博客，前端杂货铺</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">83</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">97</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yinhezhu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:124104008@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Vue与React的对比"><span class="nav-number">1.</span> <span class="nav-text">Vue与React的对比</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-数据绑定"><span class="nav-number">1.1.</span> <span class="nav-text">1.数据绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Vue中有关数据绑定的部分"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 Vue中有关数据绑定的部分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-1插值表达式"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">1.1.1插值表达式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-2-指令"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">1.1.2 指令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-3-class与style绑定"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">1.1.3 class与style绑定</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-4-条件渲染和列表渲染"><span class="nav-number">1.1.1.4.</span> <span class="nav-text">1.1.4 条件渲染和列表渲染</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-5-事件处理器"><span class="nav-number">1.1.1.5.</span> <span class="nav-text">1.1.5 事件处理器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-6-表单控件"><span class="nav-number">1.1.1.6.</span> <span class="nav-text">1.1.6 表单控件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-7-计算属性"><span class="nav-number">1.1.1.7.</span> <span class="nav-text">1.1.7 计算属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-8-ajax数据请求"><span class="nav-number">1.1.1.8.</span> <span class="nav-text">1.1.8 ajax数据请求</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-react没有数据双向绑定"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 react没有数据双向绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-1事件处理"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">1.2.1事件处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-2-条件渲染"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">1.2.2 条件渲染</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-3-列表渲染"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">1.2.3 列表渲染</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-4-表单操作"><span class="nav-number">1.1.2.4.</span> <span class="nav-text">1.2.4 表单操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-5-状态提升"><span class="nav-number">1.1.2.5.</span> <span class="nav-text">1.2.5 状态提升</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-组件化以及组件数据流"><span class="nav-number">1.2.</span> <span class="nav-text">2.组件化以及组件数据流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-React中的组件及数据流"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 React中的组件及数据流</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#props与state的区别"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">props与state的区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-1-组件之间的通信"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">2.1.1 组件之间的通信</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-2-组件的生命周期"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">2.1.2 组件的生命周期</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Vue中的组件和数据流"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 Vue中的组件和数据流</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-组件化应用构建"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">2.2.1 组件化应用构建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-响应式"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">2.2.2 响应式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-3-组件的生命周期"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">2.2.3 组件的生命周期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-3-组件之间的通信"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">2.2.3 组件之间的通信</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-父向子"><span class="nav-number">1.2.2.4.1.</span> <span class="nav-text">1.父向子</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-子向父"><span class="nav-number">1.2.2.4.2.</span> <span class="nav-text">2.子向父</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-非父子组件通信"><span class="nav-number">1.2.2.4.3.</span> <span class="nav-text">3. 非父子组件通信</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-4-单向数据流"><span class="nav-number">1.2.2.5.</span> <span class="nav-text">2.2.4 单向数据流</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-状态管理"><span class="nav-number">1.3.</span> <span class="nav-text">3.状态管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-React中的状态管理：Flux"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 React中的状态管理：Flux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Vue中的状态管理vuex"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 Vue中的状态管理vuex</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-路由"><span class="nav-number">1.4.</span> <span class="nav-text">4.路由</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-React中的路由"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.1 React中的路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Vue中的路由"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.2 Vue中的路由</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-渲染性能对比"><span class="nav-number">1.5.</span> <span class="nav-text">5. 渲染性能对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-React视图渲染"><span class="nav-number">1.5.1.</span> <span class="nav-text">5.1 React视图渲染</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#组件渲染"><span class="nav-number">1.5.1.1.</span> <span class="nav-text">组件渲染</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-Vue视图渲染"><span class="nav-number">1.5.2.</span> <span class="nav-text">5.2 Vue视图渲染</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">1.6.</span> <span class="nav-text">小结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Vue的优势包括："><span class="nav-number">1.6.1.</span> <span class="nav-text">Vue的优势包括：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#React的优势包括："><span class="nav-number">1.6.2.</span> <span class="nav-text">React的优势包括：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#而实际上，React和Vue都是非常优秀的框架，它们之间的相似之处多过不同之处，并且它们大部分最棒的功能是相通的："><span class="nav-number">1.6.2.1.</span> <span class="nav-text">而实际上，React和Vue都是非常优秀的框架，它们之间的相似之处多过不同之处，并且它们大部分最棒的功能是相通的：</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yin He Zhu</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('body');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("fWl7upiFX3fWezXSC2W9VNwx-gzGzoHsz", "AHiEA2CcxttYPXybKrYPOh1d");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+</html>

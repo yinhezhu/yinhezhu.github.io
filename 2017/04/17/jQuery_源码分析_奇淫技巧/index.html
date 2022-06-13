@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/apple-touch-icon-next.png?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="源码,jQuery,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="系列第一篇： 【深入浅出jQuery】源码浅析–整体架构 本篇是系列第二篇，标题起得有点大，希望内容对得起这个标题，这篇文章主要总结一下在 jQuery 中一些十分讨巧的 coding 方式，将会由浅及深，可能会有一些基础，但是我希望全面一点，对看文章的人都有所帮助，源码我还一直在阅读，也会不断的更新本文。 即便你不想去阅读源码，看看下面的总结，我想对提高编程能力，转换思维方式都大有裨益，废话少说">
+<meta name="keywords" content="源码,jQuery">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jQuery_源码分析_奇淫技巧">
+<meta property="og:url" content="https://yinhezhu.github.com/2017/04/17/jQuery_源码分析_奇淫技巧/index.html">
+<meta property="og:site_name" content="宽以待人">
+<meta property="og:description" content="系列第一篇： 【深入浅出jQuery】源码浅析–整体架构 本篇是系列第二篇，标题起得有点大，希望内容对得起这个标题，这篇文章主要总结一下在 jQuery 中一些十分讨巧的 coding 方式，将会由浅及深，可能会有一些基础，但是我希望全面一点，对看文章的人都有所帮助，源码我还一直在阅读，也会不断的更新本文。 即便你不想去阅读源码，看看下面的总结，我想对提高编程能力，转换思维方式都大有裨益，废话少说">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-05-07T08:25:58.051Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jQuery_源码分析_奇淫技巧">
+<meta name="twitter:description" content="系列第一篇： 【深入浅出jQuery】源码浅析–整体架构 本篇是系列第二篇，标题起得有点大，希望内容对得起这个标题，这篇文章主要总结一下在 jQuery 中一些十分讨巧的 coding 方式，将会由浅及深，可能会有一些基础，但是我希望全面一点，对看文章的人都有所帮助，源码我还一直在阅读，也会不断的更新本文。 即便你不想去阅读源码，看看下面的总结，我想对提高编程能力，转换思维方式都大有裨益，废话少说">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://yinhezhu.github.com/2017/04/17/jQuery_源码分析_奇淫技巧/">
+
+
+
+
+
+  <title>jQuery_源码分析_奇淫技巧 | 宽以待人</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a target="_blank" href="https://github.com/yinhezhu" class="github-corner" aria-label="View source on Github"><svg width="92" height="92" viewbox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; z-index: 2020; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">宽以待人</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yinhezhu.github.com/2017/04/17/jQuery_源码分析_奇淫技巧/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yin He Zhu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/bg.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="宽以待人">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">jQuery_源码分析_奇淫技巧</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-17T16:32:53+08:00">
+                2017-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/jQuery/" itemprop="url" rel="index">
+                    <span itemprop="name">jQuery</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/04/17/jQuery_源码分析_奇淫技巧/" class="leancloud_visitors" data-flag-title="jQuery_源码分析_奇淫技巧">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>系列第一篇： <a href="/2018/04/17/jQuery-源码分析/">【深入浅出jQuery】源码浅析–整体架构</a></p>
+<p>本篇是系列第二篇，标题起得有点大，希望内容对得起这个标题，这篇文章主要总结一下在 jQuery 中一些十分讨巧的 coding 方式，将会由浅及深，可能会有一些基础，但是我希望全面一点，对看文章的人都有所帮助，源码我还一直在阅读，也会不断的更新本文。</p>
+<p>即便你不想去阅读源码，看看下面的总结，我想对提高编程能力，转换思维方式都大有裨益，废话少说，进入正题。</p>
+<h2 id="短路表达式-与-多重短路表达式"><a href="#短路表达式-与-多重短路表达式" class="headerlink" title="短路表达式 与 多重短路表达式"></a>短路表达式 与 多重短路表达式</h2><p><code>短路表达式</code>这个应该人所皆知了。在 <code>jQuery</code> 中，大量的使用了短路表达式与多重短路表达式。</p>
+<p><code>短路表达式</code>：作为”&amp;&amp;”和”||”操作符的操作数表达式，这些表达式在进行求值时，只要最终的结果已经可以确定是真或假，求值过程便告终止，这称之为短路求值。这是这两个操作符的一个重要属性。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ||短路表达式</span></span><br><span class="line"><span class="keyword">var</span> foo = a || b;</span><br><span class="line"><span class="comment">// 相当于</span></span><br><span class="line"><span class="keyword">if</span>(a)&#123;</span><br><span class="line">    foo = a;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    foo = b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// &amp;&amp;短路表达式</span></span><br><span class="line"><span class="keyword">var</span> bar = a &amp;&amp; b;</span><br><span class="line"><span class="comment">// 相当于</span></span><br><span class="line"><span class="keyword">if</span>(a)&#123;</span><br><span class="line">    bar = b;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    bar = a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当然，上面两个例子是短路表达式最简单是情况，多数情况下，<code>jQuery</code> 是这样使用它们的：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 选自 jQuery 源码中的 Sizzle 部分</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">siblingCheck</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> cur = b &amp;&amp; a,</span><br><span class="line">        diff = cur &amp;&amp; a.nodeType === <span class="number">1</span> &amp;&amp; b.nodeType === <span class="number">1</span> &amp;&amp;</span><br><span class="line">        (~b.sourceIndex || MAX_NEGATIVE) -</span><br><span class="line">        (~a.sourceIndex || MAX_NEGATIVE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// other code ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>嗯，可以看到，<code>diff</code> 的值经历了多重短路表达式配合一些全等判断才得出，这种代码很优雅，但是可读性下降了很多，使用的时候权衡一下，多重短路表达式和简单短路表达式其实一样，只需要先把后面的当成一个整体，依次推进，得出最终值。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">1</span>, b = <span class="number">0</span>, c = <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> foo = a &amp;&amp; b &amp;&amp; c, <span class="comment">// 0 ,相当于 a &amp;&amp; (b &amp;&amp; c)</span></span><br><span class="line">  bar = a || b || c;  <span class="comment">// 1</span></span><br></pre></td></tr></table></figure></p>
+<p>这里需要提出一些值得注意的点：</p>
+<p>1、在 <code>Javascript</code> 的逻辑运算中，<code>0、&quot;&quot;、null、false、undefined、NaN</code> 都会判定为 <code>false</code> ，而其他都为 <code>true</code> ；</p>
+<p>2、因为 <code>Javascript</code> 的内置弱类型域 <code>(weak-typing domain)</code>，所以对严格的输入验证这一点不太在意，即便使用 &amp;&amp; 或者 || 运算符的运算数不是布尔值，仍然可以将它看作布尔运算。虽然如此，还是建议如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(foo)&#123; ... &#125;     <span class="comment">//不够严谨</span></span><br><span class="line"><span class="keyword">if</span>(!!foo)&#123; ... &#125;   <span class="comment">//更为严谨，!!可将其他类型的值转换为boolean类型</span></span><br></pre></td></tr></table></figure></p>
+<p>注重细节，<code>JavaScript</code> 既不弱也不低等，我们只是需要更努力一点工作以使我们的代码变得真正健壮。</p>
+<h2 id="预定义常用方法的入口"><a href="#预定义常用方法的入口" class="headerlink" title="预定义常用方法的入口"></a>预定义常用方法的入口</h2><p>在 <code>jQuery</code> 的头几十行，有这么一段有趣的代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">window, undefined</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span></span><br><span class="line">        <span class="comment">// 定义了一个对象变量，一个字符串变量，一个数组变量</span></span><br><span class="line">        class2type = &#123;&#125;,</span><br><span class="line">        core_version = <span class="string">"1.10.2"</span>,</span><br><span class="line">        core_deletedIds = [],</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 保存了对象、字符串、数组的一些常用方法 concat push 等等...</span></span><br><span class="line">        core_concat = core_deletedIds.concat,</span><br><span class="line">        core_push = core_deletedIds.push,</span><br><span class="line">        core_slice = core_deletedIds.slice,</span><br><span class="line">        core_indexOf = core_deletedIds.indexOf,</span><br><span class="line">        core_toString = class2type.toString,</span><br><span class="line">        core_hasOwn = class2type.hasOwnProperty,</span><br><span class="line">        core_trim = core_version.trim;</span><br><span class="line"></span><br><span class="line">&#125;)(<span class="built_in">window</span>);</span><br></pre></td></tr></table></figure></p>
+<p>不得不说，<code>jQuery</code> 在细节上做的真的很好，这里首先定义了一个对象变量、一个字符串变量、数组变量，要注意这 3 个变量本身在下文是有自己的用途的（可以看到，<code>jQuery</code> 作者惜字如金，真的是去压榨每一个变量的作用，使其作用最大化）；其次，借用这三个变量，再定义些常用的核心方法，从上往下是数组的 <code>concat、push 、slice 、indexOf</code> 方法，对象的 <code>toString 、hasOwnProperty</code> 方法以及字符串的 <code>trim</code> 方法，<code>core_xxxx</code> 这几个变量事先存储好了这些常用方法的入口，如果下文行文当中需要调用这些方法，将会：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">jQuery.fn = jQuery.prototype = &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将 jQuery 对象转换成数组类型</span></span><br><span class="line">    toArray: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 调用数组的 slice 方法，使用预先定义好了的 core_slice ，节省查找内存地址时间，提高效率</span></span><br><span class="line">        <span class="comment">// 相当于 return Array.prototype.slice.call(this)</span></span><br><span class="line">        <span class="keyword">return</span> core_slice.call(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，当需要使用这些预先定义好的方法，只需要借助 <code>call</code> 或者 <code>apply</code>（ <a href="/2018/04/19/ECMA-理解call和apply/">戳我详解</a> ）进行调用。<br>那么 <code>jQuery</code> 为什么要这样做呢，我觉得：</p>
+<p>1、以数组对象的 <code>concat</code> 方法为例，如果不预先定义好 <code>core_concat = core_deletedIds.concat</code> 而是调用实例 <code>arr</code> 的方法 <code>concat</code> 时，首先需要辨别当前实例 <code>arr</code> 的类型是 <code>Array</code>，在内存空间中寻找 <code>Array</code> 的 <code>concat</code> 内存入口，把当前对象 <code>arr</code> 的指针和其他参数压入栈，跳转到 <code>concat</code> 地址开始执行，而当保存了 <code>concat</code> 方法的入口 <code>core_concat</code> 时，完全就可以省去前面两个步骤，从而提升一些性能；</p>
+<p>2、另外一点，借助 <code>call</code> 或者 <code>apply</code> 的方式调用，让一些类数组可以直接调用数组的方法。就如上面是示例，<code>jQuery</code> 对象是类数组类型，可以直接调用数组的 <code>slice</code> 方法转换为数组类型。又譬如，将参数 <code>arguments</code> 转换为数组类型：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params">a,b,c</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// 将参数 arguments 转换为数组</span></span><br><span class="line">    <span class="comment">// 使之可以调用数组成员方法</span></span><br><span class="line">    <span class="keyword">var</span> arr = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>);</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="钩子机制（hook）"><a href="#钩子机制（hook）" class="headerlink" title="钩子机制（hook）"></a>钩子机制（hook）</h2><p>在 <code>jQuery 2.0.0</code> 之前的版本，对兼容性做了大量的处理，正是这样才让广大开发人员能够忽略不同浏览器的不同特性的专注于业务本身的逻辑。而其中，钩子机制在浏览器兼容方面起了十分巨大的作用。</p>
+<p>钩子是编程惯用的一种手法，用来解决一种或多种特殊情况的处理。</p>
+<p>简单来说，钩子就是适配器原理，或者说是表驱动原理，我们预先定义了一些钩子，在正常的代码逻辑中使用钩子去适配一些特殊的属性，样式或事件，这样可以让我们少写很多 <code>else if</code> 语句。</p>
+<p>如果还是很难懂，看一个简单的例子，举例说明 <code>hook</code> 到底如何使用：</p>
+<p>现在考公务员，要么靠实力，要么靠关系，但领导肯定也不会弄的那么明显，一般都是暗箱操作，这个场景用钩子实现再合理不过了。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 如果不用钩子的情况</span></span><br><span class="line"><span class="comment">// 考生分数以及父亲名</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">examinee</span>(<span class="params">name, score, fatherName</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        name: name,</span><br><span class="line">        score: score,</span><br><span class="line">        fatherName: fatherName</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 审阅考生们</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">judge</span>(<span class="params">examinees</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> result = &#123;&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> examinees) &#123;</span><br><span class="line">        <span class="keyword">var</span> curExaminee = examinees[i];</span><br><span class="line">        <span class="keyword">var</span> ret = curExaminee.score;</span><br><span class="line">        <span class="comment">// 判断是否有后门关系</span></span><br><span class="line">        <span class="keyword">if</span> (curExaminee.fatherName === <span class="string">'xijingping'</span>) &#123;</span><br><span class="line">            ret += <span class="number">1000</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (curExaminee.fatherName === <span class="string">'ligang'</span>) &#123;</span><br><span class="line">            ret += <span class="number">100</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (curExaminee.fatherName === <span class="string">'pengdehuai'</span>) &#123;</span><br><span class="line">            ret += <span class="number">50</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        result[curExaminee.name] = ret;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> lihao = examinee(<span class="string">"lihao"</span>, <span class="number">10</span>, <span class="string">'ligang'</span>);</span><br><span class="line"><span class="keyword">var</span> xida = examinee(<span class="string">'xida'</span>, <span class="number">8</span>, <span class="string">'xijinping'</span>);</span><br><span class="line"><span class="keyword">var</span> peng = examinee(<span class="string">'peng'</span>, <span class="number">60</span>, <span class="string">'pengdehuai'</span>);</span><br><span class="line"><span class="keyword">var</span> liaoxiaofeng = examinee(<span class="string">'liaoxiaofeng'</span>, <span class="number">100</span>, <span class="string">'liaodaniu'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> result = judge([lihao, xida, peng, liaoxiaofeng]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 根据分数选取前三名</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> name <span class="keyword">in</span> result) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"name:"</span> + name);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"score:"</span> + score);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，在中间审阅考生这个函数中，运用了很多 <code>else if</code> 来判断是否考生有后门关系，如果现在业务场景发生变化，又多了几名考生，那么 <code>else if</code> 势必越来越复杂，往后维护代码也将越来越麻烦，成本很大，那么这个时候如果使用钩子机制，该如何做呢？<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// relationHook 是个钩子函数，用于得到关系得分</span></span><br><span class="line"><span class="keyword">var</span> relationHook = &#123;</span><br><span class="line">    <span class="string">"xijinping"</span>: <span class="number">1000</span>,</span><br><span class="line">    <span class="string">"ligang"</span>: <span class="number">100</span>,</span><br><span class="line">    <span class="string">"pengdehuai"</span>: <span class="number">50</span>,</span><br><span class="line">　　 <span class="comment">// 新的考生只需要在钩子里添加关系分</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 考生分数以及父亲名</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">examinee</span>(<span class="params">name, score, fatherName</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        name: name,</span><br><span class="line">        score: score,</span><br><span class="line">        fatherName: fatherName</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 审阅考生们</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">judge</span>(<span class="params">examinees</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> result = &#123;&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> examinees) &#123;</span><br><span class="line">        <span class="keyword">var</span> curExaminee = examinees[i];</span><br><span class="line">        <span class="keyword">var</span> ret = curExaminee.score;</span><br><span class="line">        <span class="keyword">if</span> (relationHook[curExaminee.fatherName] ) &#123;</span><br><span class="line">            ret += relationHook[curExaminee.fatherName] ;</span><br><span class="line">        &#125;</span><br><span class="line">        result[curExaminee.name] = ret;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> lihao = examinee(<span class="string">"lihao"</span>, <span class="number">10</span>, <span class="string">'ligang'</span>);</span><br><span class="line"><span class="keyword">var</span> xida = examinee(<span class="string">'xida'</span>, <span class="number">8</span>, <span class="string">'xijinping'</span>);</span><br><span class="line"><span class="keyword">var</span> peng = examinee(<span class="string">'peng'</span>, <span class="number">60</span>, <span class="string">'pengdehuai'</span>);</span><br><span class="line"><span class="keyword">var</span> liaoxiaofeng = examinee(<span class="string">'liaoxiaofeng'</span>, <span class="number">100</span>, <span class="string">'liaodaniu'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> result = judge([lihao, xida, peng, liaoxiaofeng]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 根据分数选取前三名</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> name <span class="keyword">in</span> result) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"name:"</span> + name);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"score:"</span> + score);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，使用钩子去处理特殊情况，可以让代码的逻辑更加清晰，省去大量的条件判断，上面的钩子机制的实现方式，采用的就是表驱动方式，就是我们事先预定好一张表（俗称打表），用这张表去适配特殊情况。当然 <code>jQuery</code> 的 <code>hook</code> 是一种更为抽象的概念，在不同场景可以用不同方式实现。</p>
+<p>看看 <code>jQuery</code> 里的表驱动 <code>hook</code> 实现，<code>$.type</code> 方法：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">window, undefined</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span></span><br><span class="line">        <span class="comment">// 用于预存储一张类型表用于 hook</span></span><br><span class="line">        class2type = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 原生的 typeof 方法并不能区分出一个变量它是 Array 、RegExp 等 object 类型，jQuery 为了扩展 typeof 的表达力，因此有了 $.type 方法</span></span><br><span class="line">    <span class="comment">// 针对一些特殊的对象（例如 null，Array，RegExp）也进行精准的类型判断</span></span><br><span class="line">    <span class="comment">// 运用了钩子机制，判断类型前，将常见类型打表，先存于一个 Hash 表 class2type 里边</span></span><br><span class="line">    jQuery.each(<span class="string">"Boolean Number String Function Array Date RegExp Object Error"</span>.split(<span class="string">" "</span>), <span class="function"><span class="keyword">function</span>(<span class="params">i, name</span>) </span>&#123;</span><br><span class="line">        class2type[<span class="string">"[object "</span> + name + <span class="string">"]"</span>] = name.toLowerCase();</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    jQuery.extend(&#123;</span><br><span class="line">        <span class="comment">// 确定JavaScript 对象的类型</span></span><br><span class="line">        <span class="comment">// 这个方法的关键之处在于 class2type[core_toString.call(obj)]</span></span><br><span class="line">        <span class="comment">// 可以使得 typeof obj 为 "object" 类型的得到更进一步的精确判断</span></span><br><span class="line">        type: <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (obj == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">String</span>(obj);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 利用事先存好的 hash 表 class2type 作精准判断</span></span><br><span class="line">            <span class="comment">// 这里因为 hook 的存在，省去了大量的 else if 判断</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">typeof</span> obj === <span class="string">"object"</span> || <span class="keyword">typeof</span> obj === <span class="string">"function"</span> ?</span><br><span class="line">                class2type[core_toString.call(obj)] || <span class="string">"object"</span> :</span><br><span class="line">                <span class="keyword">typeof</span> obj;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)(<span class="built_in">window</span>);</span><br></pre></td></tr></table></figure></p>
+<p>这里的 <code>hook</code> 只是 <code>jQuery</code> 大量使用钩子的冰山一角，在对 <code>DOM</code> 元素的操作一块，`attr 、val 、prop 、css 方法大量运用了钩子，用于兼容 IE 系列下的一些怪异行为。在遇到钩子函数的时候，要结合具体情境具体分析，这些钩子相对于表驱动而言更加复杂，它们的结构大体如下，只要记住钩子的核心原则，保持代码整体逻辑的流畅性，在特殊的情境下去处理一些特殊的情况：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> someHook = &#123;</span><br><span class="line">    <span class="keyword">get</span>: function(elem) &#123;</span><br><span class="line">        <span class="comment">// obtain and return a value</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"something"</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="keyword">set</span>: function(elem, value) &#123;</span><br><span class="line">        <span class="comment">// do something with value</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从某种程度上讲，钩子是一系列被设计为以你自己的代码来处理自定义值的回调函数。有了钩子，你可以将差不多任何东西保持在可控范围内。</p>
+<p>从设计模式的角度而言，这种钩子运用了策略模式。</p>
+<blockquote>
+<p>策略模式：将不变的部分和变化的部分隔开是每个设计模式的主题，而策略模式则是将算法的使用与算法的实现分离开来的典型代表。使用策略模式重构代码，可以消除程序中大片的条件分支语句。在实际开发中，我们通常会把算法的含义扩散开来，使策略模式也可以用来封装一系列的“业务规则”。只要这些业务规则指向的目标一致，并且可以被替换使用，我们就可以使用策略模式来封装他们。</p>
+</blockquote>
+<p>策略模式的优点：</p>
+<ul>
+<li>策略模式利用组合，委托和多态等技术思想，可以有效的避免多重条件选择语句；</li>
+<li>策略模式提供了对开放-封闭原则的完美支持，将算法封装在独立的函数中，使得它们易于切换，易于理解，易于扩展。</li>
+<li>策略模式中的算法也可以复用在系统的其它地方，从而避免许多重复的复制粘贴工作。</li>
+</ul>
+<h2 id="连贯接口"><a href="#连贯接口" class="headerlink" title="连贯接口"></a>连贯接口</h2><p>无论 <code>jQuery</code> 如今的流行趋势是否在下降，它用起来确实让人大呼过瘾，这很大程度归功于它的链式调用，接口的连贯性及易记性。很多人将连贯接口看成链式调用，这并不全面，我觉得连贯接口包含了链式调用且代表更多。而 <code>jQuery</code> 无疑是连贯接口的佼佼者。</p>
+<p><code>1、链式调用</code>：链式调用的主要思想就是使代码尽可能流畅易读，从而可以更快地被理解。有了链式调用，我们可以将代码组织为类似语句的片段，增强可读性的同时减少干扰。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 传统写法</span></span><br><span class="line"><span class="keyword">var</span> elem = <span class="built_in">document</span>.getElementById(<span class="string">"foobar"</span>);</span><br><span class="line">elem.style.background = <span class="string">"red"</span>;</span><br><span class="line">elem.style.color = <span class="string">"green"</span>;</span><br><span class="line">elem.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">  alert(<span class="string">"hello world!"</span>);</span><br><span class="line">&#125;, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// jQuery 写法</span></span><br><span class="line">$(<span class="string">'xxx'</span>)</span><br><span class="line">    .css(<span class="string">"background"</span>, <span class="string">"red"</span>)</span><br><span class="line">    .css(<span class="string">"color"</span>, <span class="string">"green"</span>)</span><br><span class="line">    .on(<span class="string">"click"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">    　　alert(<span class="string">"hello world"</span>);</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure></p>
+<p><code>2、命令查询同体</code>：这个上一章也讲过了，就是函数重载。正常而言，应该是命令查询分离（Command and Query Separation，CQS），是源于命令式编程的一个概念。那些改变对象的状态（内部的值）的函数称为命令，而那些检索值的函数称为查询。原则上，查询函数返回数据，命令函数返回状态，各司其职。而 <code>jQuery</code> 将 <code>getter</code> 和 <code>setter</code> 方法压缩到单一方法中创建了一个连贯的接口，使得代码暴露更少的方法，但却以更少的代码实现同样的目标。</p>
+<p><code>3、参数映射及处理</code>：<code>jQuery</code> 的接口连贯性还体现在了对参数的兼容处理上，方法如何接收数据比让它们具有可链性更为重要。虽然方法的链式调用是非常普遍的，你可以很容易地在你的代码中实现，但是处理参数却不同，使用者可能传入各种奇怪的参数类型，而 <code>jQuery</code> 作者想的真的很周到，考虑了用户的多种使用场景，提供了多种对参数的处理。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 传入键值对</span></span><br><span class="line">jQuery(<span class="string">"#some-selector"</span>)</span><br><span class="line">  .css(<span class="string">"background"</span>, <span class="string">"red"</span>)</span><br><span class="line">  .css(<span class="string">"color"</span>, <span class="string">"white"</span>)</span><br><span class="line">  .css(<span class="string">"font-weight"</span>, <span class="string">"bold"</span>)</span><br><span class="line">  .css(<span class="string">"padding"</span>, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 传入 JSON 对象</span></span><br><span class="line">jQuery(<span class="string">"#some-selector"</span>).css(&#123;</span><br><span class="line">  <span class="string">"background"</span> : <span class="string">"red"</span>,</span><br><span class="line">  <span class="string">"color"</span> : <span class="string">"white"</span>,</span><br><span class="line">  <span class="string">"font-weight"</span> : <span class="string">"bold"</span>,</span><br><span class="line">  <span class="string">"padding"</span> : <span class="number">10</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p><code>jQuery</code> 的 <code>on()`</code> 方法可以注册事件处理器。和 <code>CSS()</code> 一样它也可以接收一组映射格式的事件，但更进一步地，它允许单一处理器可以被多个事件注册：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// binding events by passing a map</span></span><br><span class="line">jQuery(<span class="string">"#some-selector"</span>).on(&#123;</span><br><span class="line">  <span class="string">"click"</span> : myClickHandler,</span><br><span class="line">  <span class="string">"keyup"</span> : myKeyupHandler,</span><br><span class="line">  <span class="string">"change"</span> : myChangeHandler</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// binding a handler to multiple events:</span></span><br><span class="line">jQuery(<span class="string">"#some-selector"</span>).on(<span class="string">"click keyup change"</span>, myEventHandler);</span><br></pre></td></tr></table></figure></p>
+<h2 id="setTimeout-in-Jquery"><a href="#setTimeout-in-Jquery" class="headerlink" title="setTimeout in Jquery"></a>setTimeout in Jquery</h2><p>写到这里，发现上文的主题有些飘忽，接近于写成了 如何写出更好的 Javascript 代码，下面介绍一些 jQuery 中我觉得很棒的小技巧。</p>
+<p>熟悉 <code>jQuery</code> 的人都知道 <code>DOM Ready</code> 事件，传<code>Javascript</code>原生的 <code>window.onload</code> 事件是在页面所有的资源都加载完毕后触发的。如果页面上有大图片等资源响应缓慢, 会导致 <code>window.onload</code> 事件迟迟无法触发，所以出现了<code>DOM Ready</code> 事件。此事件在 <code>DOM</code> 文档结构准备完毕后触发，即在资源加载前触发。另外我们需要在 <code>DOM</code> 准备完毕后，再修改<code>DOM</code>结构，比如添加<code>DOM</code>元素等。而为了完美实现 <code>DOM Ready</code> 事件，兼容各浏览器及低版本<code>IE</code>（针对高级的浏览器，可以使用 DOMContentLoaded 事件，省时省力），在 <code>jQuery.ready()</code> 方法里，运用了 <code>setTimeout()</code> 方法的一个特性， 在 <code>setTimeout</code> 中触发的函数, 一定是在 <code>DOM</code> 准备完毕后触发。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">jQuery.extend(&#123;</span><br><span class="line">    ready: <span class="function"><span class="keyword">function</span>(<span class="params">wait</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 如果需要等待，holdReady()的时候，把hold住的次数减1，如果还没到达0，说明还需要继续hold住，return掉</span></span><br><span class="line">        <span class="comment">// 如果不需要等待，判断是否已经Ready过了，如果已经ready过了，就不需要处理了。异步队列里边的done的回调都会执行了</span></span><br><span class="line">        <span class="keyword">if</span> (wait === <span class="literal">true</span> ? --jQuery.readyWait : jQuery.isReady) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 确定 body 存在</span></span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">document</span>.body) &#123;</span><br><span class="line">            <span class="comment">// 如果 body 还不存在 ，DOMContentLoaded 未完成，此时</span></span><br><span class="line">            <span class="comment">// 将 jQuery.ready 放入定时器 setTimeout 中</span></span><br><span class="line">            <span class="comment">// 不带时间参数的 setTimeout(a) 相当于 setTimeout(a,0)</span></span><br><span class="line">            <span class="comment">// 但是这里并不是立即触发 jQuery.ready</span></span><br><span class="line">            <span class="comment">// 由于 javascript 的单线程的异步模式</span></span><br><span class="line">            <span class="comment">// setTimeout(jQuery.ready) 会等到重绘完成才执行代码，也就是 DOMContentLoaded 之后才执行 jQuery.ready</span></span><br><span class="line">            <span class="comment">// 所以这里有个小技巧：在 setTimeout 中触发的函数, 一定会在 DOM 准备完毕后触发</span></span><br><span class="line">            <span class="keyword">return</span> setTimeout(jQuery.ready);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Remember that the DOM is ready</span></span><br><span class="line">        <span class="comment">// 记录 DOM ready 已经完成</span></span><br><span class="line">        jQuery.isReady = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// If a normal DOM Ready event fired, decrement, and wait if need be</span></span><br><span class="line">        <span class="comment">// wait 为 false 表示ready事情未触发过，否则 return</span></span><br><span class="line">        <span class="keyword">if</span> (wait !== <span class="literal">true</span> &amp;&amp; --jQuery.readyWait &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// If there are functions bound, to execute</span></span><br><span class="line">        <span class="comment">// 调用异步队列，然后派发成功事件出去（最后使用done接收，把上下文切换成document，默认第一个参数是jQuery。</span></span><br><span class="line">        readyList.resolveWith(<span class="built_in">document</span>, [jQuery]);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Trigger any bound ready events</span></span><br><span class="line">        <span class="comment">// 最后jQuery还可以触发自己的ready事件</span></span><br><span class="line">        <span class="comment">// 例如：</span></span><br><span class="line">        <span class="comment">//    $(document).on('ready', fn2);</span></span><br><span class="line">        <span class="comment">//    $(document).ready(fn1);</span></span><br><span class="line">        <span class="comment">// 这里的fn1会先执行，自己的ready事件绑定的fn2回调后执行</span></span><br><span class="line">        <span class="keyword">if</span> (jQuery.fn.trigger) &#123;</span><br><span class="line">            jQuery(<span class="built_in">document</span>).trigger(<span class="string">"ready"</span>).off(<span class="string">"ready"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+      <div>
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i> 感谢您的阅读-------------</div>
+    
+</div>
+      </div>
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/源码/" rel="tag"><i class="fa fa-tag"></i> 源码</a>
+          
+            <a href="/tags/jQuery/" rel="tag"><i class="fa fa-tag"></i> jQuery</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/17/综合_eslint/" rel="prev" title="综合-eslint使用与配置">
+                综合-eslint使用与配置 <i class="fa fa-chevron-left"></i>
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/bg.jpg" alt="Yin He Zhu">
+            
+              <p class="site-author-name" itemprop="name">Yin He Zhu</p>
+              <p class="site-description motion-element" itemprop="description">尹鹤珠的技术博客，前端杂货铺</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">83</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">97</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yinhezhu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:124104008@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#短路表达式-与-多重短路表达式"><span class="nav-number">1.</span> <span class="nav-text">短路表达式 与 多重短路表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#预定义常用方法的入口"><span class="nav-number">2.</span> <span class="nav-text">预定义常用方法的入口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#钩子机制（hook）"><span class="nav-number">3.</span> <span class="nav-text">钩子机制（hook）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连贯接口"><span class="nav-number">4.</span> <span class="nav-text">连贯接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#setTimeout-in-Jquery"><span class="nav-number">5.</span> <span class="nav-text">setTimeout in Jquery</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yin He Zhu</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('body');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("fWl7upiFX3fWezXSC2W9VNwx-gzGzoHsz", "AHiEA2CcxttYPXybKrYPOh1d");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+</html>
